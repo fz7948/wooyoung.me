@@ -3,133 +3,147 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Terminal</title>
+  <title>Remote Control</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#fafafa">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Terminal">
+  <meta name="apple-mobile-web-app-title" content="Remote">
   <link rel="apple-touch-icon" href="/icon-192.png">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
   <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --surface-subtle: #f4f4f5;
+      --border: #e4e4e7;
+      --border-subtle: #f0f0f2;
+      --text: #18181b;
+      --text-muted: #52525b;
+      --text-dim: #a1a1aa;
+      --accent: #18181b;
+      --green: #10b981;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     html, body {
       height: 100%;
       height: 100dvh;
       overflow: hidden;
       background: var(--bg);
       color: var(--text);
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-    .term-shell {
-      max-width: 640px;
+
+    .app {
+      max-width: 680px;
       margin: 0 auto;
       width: 100%;
       height: 100%;
-      padding: 16px;
       display: flex;
       flex-direction: column;
-    }
-    @media (max-width: 600px) {
-      .term-shell {
-        padding: 0;
-      }
-      #view-terminal {
-        border-radius: 0 !important;
-        border-left: none !important;
-        border-right: none !important;
-        border-top: none !important;
-        box-shadow: none !important;
-      }
-    }
-    #view-terminal {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
-      position: relative;
+      background: var(--bg);
     }
 
-    /* Top Bar */
-    .term-bar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 12px 16px;
+    /* Top Header */
+    .topbar {
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(250, 250, 250, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       flex-shrink: 0;
+      z-index: 10;
     }
-    .term-bar-left {
+    .topbar-left {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .term-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text);
+    .app-title {
+      font-size: 0.92rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
-    .term-sub {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-    .term-bar-right {
+    .topbar-right {
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .status-btn {
+    .node-pill {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      background: var(--border-subtle);
+      background: var(--surface);
       color: var(--text-muted);
-      padding: 4px 10px;
+      padding: 5px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: border-color 0.15s, color 0.15s;
+      transition: border-color 0.15s;
     }
-    .status-btn:hover {
+    .node-pill:hover {
       border-color: var(--text-dim);
-      color: var(--text);
     }
     .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #9ca3af;
+      background: var(--text-dim);
     }
-    .status-btn.ready .status-dot {
-      background: #10b981;
+    .node-pill.ready .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+    }
+    .icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
     }
 
-    /* Settings Drawer */
-    .settings-panel {
+    /* Connection Settings Drawer */
+    .settings-drawer {
       display: none;
-      background: #f9fafb;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 14px 16px;
+      padding: 14px 18px;
       flex-direction: column;
       gap: 10px;
       flex-shrink: 0;
     }
-    .settings-panel.open {
+    .settings-drawer.open {
       display: flex;
     }
-    .field-row {
+    .field-group {
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -143,19 +157,20 @@
     }
     .field-input {
       width: 100%;
-      padding: 8px 10px;
+      padding: 8px 11px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: var(--text);
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
       outline: none;
     }
     .field-input:focus {
       border-color: var(--text);
+      background: var(--surface);
     }
-    .settings-actions {
+    .drawer-actions {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
@@ -165,7 +180,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       padding: 6px 12px;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -177,219 +192,389 @@
       color: #fff;
     }
 
-    /* Terminal Output Screen */
-    #terminal-screen {
+    /* Main Stream / Feed */
+    #feed {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12.5px;
-      line-height: 1.65;
-      color: var(--text);
-      word-break: break-word;
-      white-space: pre-wrap;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
       -webkit-overflow-scrolling: touch;
     }
-    .log-entry {
-      margin-bottom: 14px;
-    }
-    .log-cmd {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      color: var(--text);
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .log-cmd .prompt-sign {
-      color: var(--text-dim);
-      font-weight: 400;
-      user-select: none;
-    }
-    .log-out {
-      color: var(--text-muted);
-      padding-left: 14px;
-      border-left: 1.5px solid var(--border);
-    }
-    .log-err {
-      color: #dc2626;
-      padding-left: 14px;
-      border-left: 1.5px solid #fca5a5;
-    }
-    .log-muted {
-      color: var(--text-dim);
-      font-size: 12px;
-    }
 
-    /* Quick Action Bar */
-    .accessory-bar {
-      background: var(--surface);
-      border-top: 1px solid var(--border-subtle);
-      padding: 8px 12px;
+    /* Empty State */
+    .empty-state {
+      margin: auto 0;
       display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      flex-shrink: 0;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 24px 8px;
     }
-    .accessory-bar::-webkit-scrollbar { display: none; }
-    .tool-chip {
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 11.5px;
-      padding: 5px 11px;
-      border-radius: 7px;
-      white-space: nowrap;
-      cursor: pointer;
+    .empty-badge {
       font-family: 'JetBrains Mono', monospace;
-      touch-action: manipulation;
-      transition: all 0.12s;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
     }
-    .tool-chip:hover {
-      border-color: var(--text-dim);
+    .empty-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
       color: var(--text);
+      margin-bottom: 6px;
     }
-    .tool-chip:active {
-      background: var(--border-subtle);
-      transform: scale(0.97);
+    .empty-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      word-break: keep-all;
     }
-    .tool-chip.accent {
-      background: var(--text);
-      border-color: var(--text);
-      color: #ffffff;
-      font-weight: 500;
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 440px;
     }
-    .tool-chip.accent:hover {
-      opacity: 0.9;
-      color: #ffffff;
+    .quick-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 11px 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .quick-card:hover {
+      border-color: var(--text-dim);
+    }
+    .quick-card:active {
+      transform: scale(0.98);
+    }
+    .quick-card-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .quick-card-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
     }
 
-    /* Input Line */
-    .term-input-line {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    /* Conversation Turns */
+    .turn-user {
+      align-self: flex-end;
+      max-width: 85%;
+      background: var(--surface-subtle);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 16px 16px 4px 16px;
+      font-size: 0.93rem;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+    .turn-user .mode-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .turn-agent {
+      align-self: flex-start;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .agent-header {
       display: flex;
       align-items: center;
       gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .agent-header strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Tool Execution Pills (Claude Code style) */
+    .tool-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .tool-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tool-pill-icon {
+      color: var(--text-dim);
+      font-size: 11px;
       flex-shrink: 0;
     }
-    .cli-prefix {
-      color: var(--text-dim);
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'JetBrains Mono', monospace;
-      user-select: none;
+
+    /* Response Card */
+    .agent-body {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-size: 0.93rem;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
     }
-    #cmd-input {
-      flex: 1;
-      background: transparent;
+    .agent-body.mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      background: #fcfcfd;
+    }
+    .agent-body.error {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    /* Thinking Pulse */
+    .thinking-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      width: fit-content;
+    }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* Bottom Composer (Claude App style) */
+    .composer-wrap {
+      padding: 8px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+    .composer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 12px 8px 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s;
+    }
+    .composer:focus-within {
+      border-color: #a1a1aa;
+    }
+    #prompt-input {
+      width: 100%;
       border: none;
       outline: none;
+      background: transparent;
       color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      resize: none;
+      max-height: 120px;
+      min-height: 24px;
+    }
+    #prompt-input::placeholder {
+      color: var(--text-dim);
+    }
+    .composer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .composer-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mode-switch {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      caret-color: var(--text);
-      padding: 4px 0;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s;
     }
-    #cmd-input::placeholder {
-      color: #d1d5db;
-    }
-    .send-icon-btn {
+    .mode-switch.shell-mode {
       background: var(--text);
+      border-color: var(--text);
+      color: #fff;
+    }
+    .mini-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
       border: none;
-      color: #ffffff;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+    .mini-chip:hover {
+      color: var(--text);
+      background: var(--surface-subtle);
+    }
+    .send-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--text);
+      color: #fff;
       font-size: 14px;
       cursor: pointer;
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: opacity 0.15s, transform 0.1s;
     }
-    .send-icon-btn:hover { opacity: 0.88; }
-    .send-icon-btn:active { transform: scale(0.95); }
+    .send-btn:active {
+      transform: scale(0.93);
+    }
   </style>
 </head>
 <body>
-  <div class="term-shell">
-    <div id="view-terminal">
-      <!-- Top Bar -->
-      <div class="term-bar">
-        <div class="term-bar-left">
-          <span class="term-title">imac</span>
-          <span class="term-sub">~ zsh</span>
-        </div>
-        <div class="term-bar-right">
-          <button type="button" class="status-btn" id="status-btn" onclick="toggleSettings()">
-            <span class="status-dot"></span>
-            <span id="status-text">Setup</span>
+  <div class="app">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="app-title">Remote Control</span>
+      </div>
+      <div class="topbar-right">
+        <button type="button" class="node-pill" id="node-pill" onclick="toggleSettings()">
+          <span class="status-dot"></span>
+          <span id="node-label">Setup</span>
+        </button>
+        <button type="button" class="icon-btn" onclick="resetSession()" title="New session" aria-label="Clear">↺</button>
+      </div>
+    </header>
+
+    <!-- Inline Settings Drawer -->
+    <div class="settings-drawer" id="settings-drawer">
+      <div class="field-group">
+        <label class="field-label" for="cfg-api">iMac Endpoint URL</label>
+        <input class="field-input" id="cfg-api" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="cfg-token">Access Token</label>
+        <input class="field-input" id="cfg-token" type="password" placeholder="Token" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="drawer-actions">
+        <button type="button" class="btn-sm" onclick="toggleSettings(false)">Cancel</button>
+        <button type="button" class="btn-sm primary" onclick="saveSettings()">Save</button>
+      </div>
+    </div>
+
+    <!-- Conversation Stream -->
+    <main id="feed">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-badge">iMac 24GB Node</div>
+        <div class="empty-title">무엇을 실행할까요?</div>
+        <div class="empty-sub">자연어로 에이전트에게 지시하거나 시스템 상태를 확인하세요.</div>
+        <div class="quick-grid">
+          <button type="button" class="quick-card" onclick="runQuick('status', true)">
+            <div class="quick-card-title">시스템 상태</div>
+            <div class="quick-card-sub">CPU · 메모리 · 디스크</div>
+          </button>
+          <button type="button" class="quick-card" onclick="runQuick('uptime', true)">
+            <div class="quick-card-title">가동 시간</div>
+            <div class="quick-card-sub">uptime &amp; load</div>
+          </button>
+          <button type="button" class="quick-card" onclick="runQuick('현재 실행 중인 주요 프로세스와 메모리 상태 요약해줘', false)">
+            <div class="quick-card-title">리소스 브리핑</div>
+            <div class="quick-card-sub">Agent 진단 요청</div>
+          </button>
+          <button type="button" class="quick-card" onclick="runQuick('df -h /', true)">
+            <div class="quick-card-title">스토리지 용량</div>
+            <div class="quick-card-sub">df -h /</div>
           </button>
         </div>
       </div>
+    </main>
 
-      <!-- Inline Settings Drawer -->
-      <div class="settings-panel" id="settings-panel">
-        <div class="field-row">
-          <label class="field-label" for="cfg-api">Endpoint URL</label>
-          <input class="field-input" id="cfg-api" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" spellcheck="false" />
+    <!-- Claude Code style Composer -->
+    <div class="composer-wrap">
+      <form class="composer" onsubmit="handleSubmit(event)">
+        <textarea id="prompt-input" rows="1" placeholder="iMac 에이전트에게 작업 지시…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <div class="composer-bar">
+          <div class="composer-tools">
+            <button type="button" class="mode-switch" id="mode-switch" onclick="toggleMode()">✦ Agent</button>
+            <button type="button" class="mini-chip" onclick="runQuick('status', true)">status</button>
+            <button type="button" class="mini-chip" onclick="promptSay()">say</button>
+          </div>
+          <button type="submit" class="send-btn" aria-label="Send">↑</button>
         </div>
-        <div class="field-row">
-          <label class="field-label" for="cfg-token">Access Token</label>
-          <input class="field-input" id="cfg-token" type="password" placeholder="Token" autocomplete="off" spellcheck="false" />
-        </div>
-        <div class="settings-actions">
-          <button type="button" class="btn-sm" onclick="toggleSettings(false)">Cancel</button>
-          <button type="button" class="btn-sm primary" onclick="saveSettings()">Save</button>
-        </div>
-      </div>
-
-      <!-- Terminal Output -->
-      <div id="terminal-screen">
-        <div class="log-entry log-muted">iMac 24GB node ready.</div>
-      </div>
-
-      <!-- Quick Chips -->
-      <div class="accessory-bar">
-        <button type="button" class="tool-chip accent" onclick="fillAgent(event)">agent</button>
-        <button type="button" class="tool-chip" onclick="quickRun('status')">status</button>
-        <button type="button" class="tool-chip" onclick="quickRun('uptime')">uptime</button>
-        <button type="button" class="tool-chip" onclick="fillSay(event)">say</button>
-        <button type="button" class="tool-chip" onclick="quickRun('ls -la')">ls</button>
-        <button type="button" class="tool-chip" onclick="quickRun('df -h /')">df</button>
-        <button type="button" class="tool-chip" onclick="clearScreen()">clear</button>
-      </div>
-
-      <!-- Command Input -->
-      <form class="term-input-line" onsubmit="handleCommand(event)">
-        <span class="cli-prefix">%</span>
-        <input id="cmd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="agent &quot;작업 내용&quot; 또는 명령어" />
-        <button type="submit" class="send-icon-btn" aria-label="Run">↵</button>
       </form>
     </div>
   </div>
 
   <script src="/site.js"></script>
   <script>
-    const screen = document.getElementById('terminal-screen');
-    const input = document.getElementById('cmd-input');
-    const statusBtn = document.getElementById('status-btn');
-    const statusText = document.getElementById('status-text');
-    const settingsPanel = document.getElementById('settings-panel');
+    const feed = document.getElementById('feed');
+    const promptInput = document.getElementById('prompt-input');
+    const nodePill = document.getElementById('node-pill');
+    const nodeLabel = document.getElementById('node-label');
+    const settingsDrawer = document.getElementById('settings-drawer');
     const cfgApi = document.getElementById('cfg-api');
     const cfgToken = document.getElementById('cfg-token');
+    const modeSwitch = document.getElementById('mode-switch');
 
-    const cmdHistory = [];
-    let historyIdx = -1;
+    let isShellMode = false;
 
     const getApi = () => localStorage.getItem('imac_api_endpoint') || '';
     const getToken = () => localStorage.getItem('imac_token') || '';
 
-    // Auto-read from URL hash: /terminal/#api=https://xxxx.trycloudflare.com&token=XXXX
+    // Auto-configure via URL hash: /terminal/#api=https://xxxx.trycloudflare.com&token=XXXX
     (function initSetup() {
       const h = new URLSearchParams(location.hash.slice(1));
       if (h.get('api')) localStorage.setItem('imac_api_endpoint', h.get('api').replace(/\/$/, ''));
@@ -399,18 +584,18 @@
     })();
 
     function updateStatusUI() {
-      const hasConfig = Boolean(getApi());
-      statusBtn.classList.toggle('ready', hasConfig);
-      statusText.textContent = hasConfig ? 'iMac' : 'Setup';
+      const ok = Boolean(getApi());
+      nodePill.classList.toggle('ready', ok);
+      nodeLabel.textContent = ok ? 'iMac 24GB' : 'Setup';
     }
 
     function toggleSettings(force) {
-      const next = typeof force === 'boolean' ? force : !settingsPanel.classList.contains('open');
+      const next = typeof force === 'boolean' ? force : !settingsDrawer.classList.contains('open');
       if (next) {
         cfgApi.value = getApi();
         cfgToken.value = getToken();
       }
-      settingsPanel.classList.toggle('open', next);
+      settingsDrawer.classList.toggle('open', next);
     }
 
     function saveSettings() {
@@ -426,131 +611,201 @@
       toggleSettings(false);
     }
 
+    function toggleMode() {
+      isShellMode = !isShellMode;
+      modeSwitch.classList.toggle('shell-mode', isShellMode);
+      modeSwitch.textContent = isShellMode ? '% Shell' : '✦ Agent';
+      promptInput.placeholder = isShellMode
+        ? '터미널 명령어 직접 입력 (예: ls -la, git status)…'
+        : 'iMac 에이전트에게 작업 지시…';
+      promptInput.focus();
+    }
+
+    function promptSay() {
+      isShellMode = true;
+      modeSwitch.classList.add('shell-mode');
+      modeSwitch.textContent = '% Shell';
+      promptInput.value = 'say ""';
+      promptInput.focus();
+      setTimeout(() => {
+        try { promptInput.setSelectionRange(5, 5); } catch (_) {}
+      }, 30);
+    }
+
+    // Auto-resize textarea & Enter to submit
+    promptInput.addEventListener('input', () => {
+      promptInput.style.height = 'auto';
+      promptInput.style.height = Math.min(promptInput.scrollHeight, 120) + 'px';
+    });
+
+    promptInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+        e.preventDefault();
+        handleSubmit(e);
+      }
+    });
+
     function esc(s) {
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function scrollToBottom() {
-      screen.scrollTop = screen.scrollHeight;
+      feed.scrollTop = feed.scrollHeight;
     }
 
-    function appendEntry(html) {
-      const d = document.createElement('div');
-      d.className = 'log-entry';
-      d.innerHTML = html;
-      screen.appendChild(d);
-      scrollToBottom();
-      return d;
+    function hideEmptyState() {
+      const empty = document.getElementById('empty-state');
+      if (empty) empty.remove();
     }
 
-    function clearScreen() {
-      screen.innerHTML = '';
+    function resetSession() {
+      feed.innerHTML = `
+        <div class="empty-state" id="empty-state">
+          <div class="empty-badge">iMac 24GB Node</div>
+          <div class="empty-title">무엇을 실행할까요?</div>
+          <div class="empty-sub">자연어로 에이전트에게 지시하거나 시스템 상태를 확인하세요.</div>
+          <div class="quick-grid">
+            <button type="button" class="quick-card" onclick="runQuick('status', true)">
+              <div class="quick-card-title">시스템 상태</div>
+              <div class="quick-card-sub">CPU · 메모리 · 디스크</div>
+            </button>
+            <button type="button" class="quick-card" onclick="runQuick('uptime', true)">
+              <div class="quick-card-title">가동 시간</div>
+              <div class="quick-card-sub">uptime &amp; load</div>
+            </button>
+            <button type="button" class="quick-card" onclick="runQuick('현재 실행 중인 주요 프로세스와 메모리 상태 요약해줘', false)">
+              <div class="quick-card-title">리소스 브리핑</div>
+              <div class="quick-card-sub">Agent 진단 요청</div>
+            </button>
+            <button type="button" class="quick-card" onclick="runQuick('df -h /', true)">
+              <div class="quick-card-title">스토리지 용량</div>
+              <div class="quick-card-sub">df -h /</div>
+            </button>
+          </div>
+        </div>
+      `;
     }
 
-    function fillAgent(e) {
+    function runQuick(text, asShell) {
+      dispatchTask(text, asShell);
+    }
+
+    function handleSubmit(e) {
       if (e) e.preventDefault();
-      input.value = 'agent ""';
-      input.focus();
-      setTimeout(() => {
-        input.focus();
-        try { input.setSelectionRange(7, 7); } catch (_) {}
-      }, 40);
+      const raw = promptInput.value.trim();
+      if (!raw) return;
+      promptInput.value = '';
+      promptInput.style.height = 'auto';
+      dispatchTask(raw, isShellMode);
     }
 
-    function fillSay(e) {
-      if (e) e.preventDefault();
-      input.value = 'say ""';
-      input.focus();
-      setTimeout(() => {
-        input.focus();
-        try { input.setSelectionRange(5, 5); } catch (_) {}
-      }, 40);
-    }
+    // Parse raw Antigravity server response into structured tool calls + clean body
+    function parseAgentOutput(raw) {
+      const lines = raw.split('\n');
+      const tools = [];
+      const bodyLines = [];
+      let elapsed = '';
 
-    function quickRun(cmd) {
-      input.value = '';
-      executeCommand(cmd);
-    }
-
-    function handleCommand(e) {
-      e.preventDefault();
-      const cmd = input.value;
-      if (cmd.trim()) {
-        input.value = '';
-        executeCommand(cmd);
-      }
-    }
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowUp') {
-        if (cmdHistory.length > 0 && historyIdx < cmdHistory.length - 1) {
-          e.preventDefault();
-          historyIdx++;
-          input.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
+      for (const line of lines) {
+        const t = line.trim();
+        if (t.startsWith('=== 🤖 Antigravity AI 응답')) {
+          const m = t.match(/\(([^)]+)\)/);
+          if (m) elapsed = m[1];
+          continue;
         }
-      } else if (e.key === 'ArrowDown') {
-        if (historyIdx > 0) {
-          e.preventDefault();
-          historyIdx--;
-          input.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
-        } else if (historyIdx === 0) {
-          e.preventDefault();
-          historyIdx = -1;
-          input.value = '';
+        if (t.startsWith('• 세션 ID:')) continue;
+        if (t.startsWith('────────')) continue;
+        if (t.startsWith('🔧 [도구 실행]')) {
+          tools.push(t.replace('🔧 [도구 실행]', '').trim());
+          continue;
         }
-      }
-    });
-
-    async function executeCommand(cmd) {
-      const trimmed = cmd.trim();
-      if (trimmed === 'clear') {
-        clearScreen();
-        return;
+        bodyLines.push(line);
       }
 
-      cmdHistory.push(cmd);
-      historyIdx = -1;
+      return {
+        elapsed,
+        tools,
+        body: bodyLines.join('\n').trim() || raw.trim()
+      };
+    }
+
+    async function dispatchTask(text, asShell) {
+      hideEmptyState();
+
+      // Allow explicit prefix overrides
+      let finalCmd = text;
+      let runAsShell = asShell;
+      if (text.startsWith('$ ')) {
+        finalCmd = text.slice(2).trim();
+        runAsShell = true;
+      } else if (text.startsWith('agent ')) {
+        runAsShell = false;
+      } else if (!runAsShell) {
+        finalCmd = `agent "${text.replace(/"/g, '\\"')}"`;
+      }
+
+      // Append user bubble
+      const userEl = document.createElement('div');
+      userEl.className = 'turn-user';
+      userEl.innerHTML = `${runAsShell ? '<span class="mode-tag">SHELL</span>' : ''}${esc(text)}`;
+      feed.appendChild(userEl);
 
       if (!getApi()) {
         toggleSettings(true);
-        appendEntry(`
-          <div class="log-cmd"><span class="prompt-sign">%</span><span>${esc(cmd)}</span></div>
-          <div class="log-err">연결 정보가 없습니다. 상단 설정 창에 Endpoint URL과 Token을 저장하세요.</div>
-        `);
+        const errTurn = document.createElement('div');
+        errTurn.className = 'turn-agent';
+        errTurn.innerHTML = `<div class="agent-body error">연결 정보가 없습니다. 상단 설정 창에 iMac Endpoint URL과 Token을 저장하세요.</div>`;
+        feed.appendChild(errTurn);
+        scrollToBottom();
         return;
       }
 
-      const isAgent = trimmed.startsWith('agent ');
-      const entry = appendEntry(`
-        <div class="log-cmd"><span class="prompt-sign">%</span><span>${esc(cmd)}</span></div>
-        <div class="log-muted">${isAgent ? 'agent working…' : 'running…'}</div>
-      `);
-      const bodyEl = entry.lastElementChild;
+      // Append agent turn with thinking state
+      const agentTurn = document.createElement('div');
+      agentTurn.className = 'turn-agent';
+      agentTurn.innerHTML = `
+        <div class="thinking-row">
+          <span class="pulse-dot"></span>
+          <span>${runAsShell ? 'Running on iMac…' : 'Thinking on iMac…'}</span>
+        </div>
+      `;
+      feed.appendChild(agentTurn);
+      scrollToBottom();
 
       try {
         const res = await fetch(getApi() + '/api/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Auth-Token': getToken() },
-          body: JSON.stringify({ command: cmd })
+          body: JSON.stringify({ command: finalCmd })
         });
         const data = await res.json();
 
         if (res.status === 401) {
-          bodyEl.className = 'log-err';
-          bodyEl.textContent = '인증 실패: 우측 상단 [iMac] 버튼을 눌러 올바른 Token을 입력하세요.';
-        } else if (data.output) {
-          bodyEl.className = 'log-out';
-          bodyEl.textContent = data.output.replace(/\n$/, '');
+          agentTurn.innerHTML = `<div class="agent-body error">인증 실패: 우측 상단 [iMac 24GB] 버튼을 눌러 올바른 Token을 입력하세요.</div>`;
         } else if (data.error) {
-          bodyEl.className = 'log-err';
-          bodyEl.textContent = data.error.replace(/\n$/, '');
+          agentTurn.innerHTML = `<div class="agent-body error">${esc(data.error.trim())}</div>`;
+        } else if (data.output) {
+          if (runAsShell) {
+            agentTurn.innerHTML = `
+              <div class="agent-header"><strong>zsh</strong><span>completed</span></div>
+              <div class="agent-body mono">${esc(data.output.replace(/\n$/, ''))}</div>
+            `;
+          } else {
+            const parsed = parseAgentOutput(data.output);
+            const toolsHtml = parsed.tools.length
+              ? `<div class="tool-steps">${parsed.tools.map(t => `<div class="tool-pill"><span class="tool-pill-icon">⚙</span><span>${esc(t)}</span></div>`).join('')}</div>`
+              : '';
+            agentTurn.innerHTML = `
+              <div class="agent-header"><strong>Antigravity</strong><span>${esc(parsed.elapsed || 'completed')}</span></div>
+              ${toolsHtml}
+              <div class="agent-body">${esc(parsed.body)}</div>
+            `;
+          }
         } else {
-          bodyEl.className = 'log-muted';
-          bodyEl.textContent = 'done.';
+          agentTurn.innerHTML = `<div class="agent-body mono">(no output)</div>`;
         }
       } catch (err) {
-        bodyEl.className = 'log-err';
-        bodyEl.textContent = `연결 실패 (${err.message}). 우측 상단 [iMac] 설정에서 주소를 확인하세요.`;
+        agentTurn.innerHTML = `<div class="agent-body error">연결 실패 (${esc(err.message)}). 상단 설정에서 Endpoint URL을 확인하세요.</div>`;
       }
       scrollToBottom();
     }

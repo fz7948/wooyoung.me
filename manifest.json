@@ -1,7 +1,7 @@
 {
-  "name": "Terminal — wooyoung.me",
-  "short_name": "Terminal",
-  "description": "iMac Remote CLI Terminal",
+  "name": "Remote Control — iMac",
+  "short_name": "Remote",
+  "description": "iMac Remote Control",
   "start_url": "/terminal/",
   "scope": "/",
   "display": "standalone",
