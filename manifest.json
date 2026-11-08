@@ -1,7 +1,7 @@
 {
-  "name": "wooyoung.dev — Notes & Thoughts",
-  "short_name": "wooyoung.dev",
-  "description": "wooyoung.dev 생각과 기술을 기록하는 개인 일기장",
+  "name": "wooyoung.me — Notes & Thoughts",
+  "short_name": "wooyoung.me",
+  "description": "wooyoung.me 생각과 기술을 기록하는 개인 일기장",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fafafa",
