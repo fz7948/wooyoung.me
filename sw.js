@@ -1,5 +1,5 @@
 // Service worker: network-first for same-origin GET requests, cache fallback offline.
-const CACHE_NAME = 'wooyoung-me-v8';
+const CACHE_NAME = 'wooyoung-me-v9';
 const ASSETS = [
   '/', '/notes/', '/terminal/',
   '/style.css', '/site.js', '/manifest.json',
