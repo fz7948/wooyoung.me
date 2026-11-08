@@ -1,7 +1,7 @@
 {
-  "name": "우영의 일기장 — Wooyoung's Log",
-  "short_name": "우영의 일기",
-  "description": "생각과 기술을 기록하는 우영의 개인 일기장",
+  "name": "wooyoung.dev — Notes & Thoughts",
+  "short_name": "wooyoung.dev",
+  "description": "wooyoung.dev 생각과 기술을 기록하는 개인 일기장",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fafafa",
@@ -22,3 +22,4 @@
     }
   ]
 }
+
