@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Wooyoung Oh — Front-end Developer</title>
+  <title>Wooyoung Oh</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#fafafa">
   <meta name="mobile-web-app-capable" content="yes">
@@ -16,41 +16,40 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
-    .intro { padding-top: 48px; }
+    .intro { padding-top: 52px; }
     h1.name {
-      font-size: 1.65rem;
-      font-weight: 700;
+      font-size: 1.55rem;
+      font-weight: 650;
       letter-spacing: -0.03em;
       line-height: 1.25;
       color: var(--text);
     }
     .tagline { 
-      font-size: 1.02rem; 
+      font-size: 0.98rem; 
       color: var(--text-muted); 
-      margin-top: 5px;
+      margin-top: 4px;
       font-weight: 450;
-      letter-spacing: -0.01em;
     }
     .bio { 
-      margin-top: 20px; 
-      font-size: 0.96rem; 
+      margin-top: 18px; 
+      font-size: 0.94rem; 
       color: var(--text-muted); 
-      line-height: 1.85; 
+      line-height: 1.8; 
       word-break: keep-all; 
     }
-    .section { margin-top: 48px; }
+    .section { margin-top: 44px; }
     .section-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-dim);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
-    .exp-item {
-      margin-bottom: 24px;
+    .item {
+      margin-bottom: 18px;
     }
-    .exp-item:last-child {
+    .item:last-child {
       margin-bottom: 0;
     }
     .row {
@@ -63,8 +62,8 @@
       color: var(--text);
     }
     .row .title { 
-      font-size: 1.02rem; 
-      font-weight: 600; 
+      font-size: 0.98rem; 
+      font-weight: 550; 
       word-break: keep-all; 
     }
     .row .meta {
@@ -73,34 +72,12 @@
       color: var(--text-dim);
       white-space: nowrap;
     }
-    .role-subtitle {
-      font-size: 0.82rem;
-      color: var(--text-dim);
-      font-family: 'JetBrains Mono', monospace;
-      margin-top: -2px;
-      margin-bottom: 6px;
-    }
     .desc { 
       font-size: 0.88rem; 
       color: var(--text-muted); 
-      line-height: 1.65;
+      line-height: 1.6;
+      margin-top: 2px;
       word-break: keep-all;
-    }
-    .details-list {
-      margin-top: 6px;
-      padding-left: 18px;
-      list-style-type: square;
-    }
-    .details-list li {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-      margin-bottom: 3px;
-      word-break: keep-all;
-    }
-    .details-list li::marker {
-      color: var(--text-dim);
-      font-size: 0.75em;
     }
     .row:hover .title { 
       text-decoration: underline; 
@@ -109,7 +86,7 @@
     }
     .more-link {
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.82rem;
       color: var(--text-dim);
@@ -119,83 +96,53 @@
     .more-link:hover {
       color: var(--text);
     }
-
   </style>
 </head>
 <body>
   <div class="container">
     <div class="intro">
       <h1 class="name">Wooyoung Oh</h1>
-      <div class="tagline">Front-end Developer crafting thoughtful web interfaces.</div>
+      <div class="tagline">Front-end developer crafting clean web interfaces.</div>
       <p class="bio">
-        동료와 함께 성장하는 프론트엔드 개발자 오우영입니다. 단독 리드부터 크로스플랫폼 아키텍처 설계까지, 사용자 경험과 프로덕트의 가치를 실현하는 인터페이스를 만듭니다. 지식은 나눌 때 가장 큰 시너지가 난다고 믿으며, 기술의 본질을 탐구하고 팀의 성장에 기여하는 조직 문화를 지향합니다.
+        정제된 인터페이스와 완성도 높은 사용성을 만드는 프론트엔드 개발자입니다. 단독 리드부터 크로스플랫폼 아키텍처까지 프로덕트의 가치를 실현하는 웹을 만들며, 동료와의 공유와 건강한 팀 시너지를 중요하게 생각합니다.
       </p>
 
       <!-- Experience Section -->
       <div class="section">
-        <div class="section-label">Work Experience</div>
+        <div class="section-label">Experience</div>
         
-        <!-- Fitners -->
-        <div class="exp-item">
+        <div class="item">
           <div class="row">
-            <span class="title">Fitners (피트너스)</span>
-            <span class="meta">2025.01 — 2026.10</span>
+            <span class="title">Fitners</span>
+            <span class="meta">2025 — 2026</span>
           </div>
-          <div class="role-subtitle">Solo Lead Frontend Developer</div>
-          <div class="desc">에이블짐 B2B/B2C 서비스 생태계(모바일 앱 2종, 웹 3종)의 아키텍처 설계부터 릴리즈·운영 전 과정 총괄.</div>
-          <ul class="details-list">
-            <li>회원용 수업 예약 앱 및 트레이너용 PT 관리 크로스플랫폼 앱 2종 개발</li>
-            <li>통합 CRM, 전사 백오피스 어드민, 반응형 브랜드 랜딩 등 웹 프로덕트 3종 구축</li>
-            <li>5개 프로덕트의 빠른 출시를 위한 공통 디자인 시스템 UI 및 API 모듈화, 엄격한 TypeScript 컨벤션 수립</li>
-          </ul>
+          <div class="desc">에이블짐 B2B/B2C 모바일 앱 2종과 웹 3종 아키텍처 설계 및 1인 총괄 릴리즈.</div>
         </div>
 
-        <!-- Illuminarean -->
-        <div class="exp-item">
+        <div class="item">
           <div class="row">
-            <a href="https://illuminarean.com/" target="_blank" rel="noopener" class="title" style="text-decoration:none;color:inherit;">Illuminarean (일루미나리안) ↗</a>
-            <span class="meta">2023.06 — 2024.11</span>
+            <a href="https://illuminarean.com/" target="_blank" rel="noopener" class="title" style="text-decoration:none;color:inherit;">Illuminarean ↗</a>
+            <span class="meta">2023 — 2024</span>
           </div>
-          <div class="role-subtitle">Frontend Developer</div>
-          <div class="desc">엔터테인먼트 정산 플랫폼, 에너지 투자 플랫폼 및 공식 웹사이트 개발.</div>
-          <ul class="details-list">
-            <li>정산 플랫폼 폼 상태 개선(react-hook-form) 및 스택 구조 모달 라우팅 시스템 설계</li>
-            <li>빌드 타임에 규격별 이미지를 사전 생성해 서버 부하를 줄이는 Webpack Custom Loader 개발</li>
-            <li>에너지 투자 플랫폼 공통 비즈니스 로직 라이브러리화 및 인턴십 기술 멘토링 주도</li>
-          </ul>
+          <div class="desc">엔터테인먼트 정산 및 에너지 투자 플랫폼 개발, Webpack 커스텀 이미지 로더 제작.</div>
         </div>
 
-        <!-- Autowini -->
-        <div class="exp-item">
+        <div class="item">
           <div class="row">
-            <span class="title">Autowini (오토위니)</span>
-            <span class="meta">2022.11 — 2023.03</span>
+            <span class="title">Autowini</span>
+            <span class="meta">2022 — 2023</span>
           </div>
-          <div class="role-subtitle">Frontend Developer</div>
-          <div class="desc">글로벌 중고차 해외 수출 이커머스 플랫폼 및 물류 관리 시스템 개발.</div>
-          <ul class="details-list">
-            <li>오토위니 럭셔리관 신규 론칭 및 React-I18next 기반 구글 시트 연동 다국어 체계 구축</li>
-            <li>선적 예약 관리를 위한 로지스 어드민 신규 개발 (Compound Component &amp; Render Props 패턴)</li>
-            <li>팀 내 주간 JS/React 세미나 및 상호 코드 리뷰 문화 정착 주도</li>
-          </ul>
+          <div class="desc">글로벌 중고차 수출 플랫폼 럭셔리관 다국어 지원 및 물류 어드민 개발.</div>
         </div>
 
-        <!-- Ahalabs -->
-        <div class="exp-item">
+        <div class="item">
           <div class="row">
-            <span class="title">Ahalabs (아하랩스)</span>
-            <span class="meta">2021.12 — 2022.09</span>
+            <span class="title">Ahalabs</span>
+            <span class="meta">2021 — 2022</span>
           </div>
-          <div class="role-subtitle">Frontend Developer</div>
-          <div class="desc">CCTV 딥러닝 영상 분석 및 머신비전 이상 검출 플랫폼 대시보드 구축.</div>
-          <ul class="details-list">
-            <li>mpegts.js 기반 실시간 CCTV 다채널 영상 스트리밍 서비스 구현</li>
-            <li>Fabric.js를 활용한 가변 해상도 비디오 ROI(관심영역) 어노테이션 도구 및 반응형 인터랙션 설계</li>
-            <li>대용량 이상 감지 시계열 데이터 시각화(Recharts) 및 비동기 렌더링 성능 최적화</li>
-          </ul>
+          <div class="desc">머신비전 이상 검출 대시보드 구축, 실시간 CCTV 스트리밍 및 영상 ROI 인터랙션 구현.</div>
         </div>
       </div>
-
 
       <!-- Notes / Writing Section -->
       <div class="section">
