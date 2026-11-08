@@ -24,9 +24,7 @@
       --text: #18181b;
       --text-muted: #52525b;
       --text-dim: #a1a1aa;
-      --accent: #18181b;
       --green: #10b981;
-      --red: #ef4444;
     }
 
     * {
@@ -47,7 +45,7 @@
     }
 
     .app {
-      max-width: 680px;
+      max-width: 640px;
       margin: 0 auto;
       width: 100%;
       height: 100%;
@@ -68,11 +66,6 @@
       -webkit-backdrop-filter: blur(10px);
       flex-shrink: 0;
       z-index: 10;
-    }
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
     .app-title {
       font-size: 0.92rem;
@@ -116,7 +109,7 @@
       width: 30px;
       height: 30px;
       border-radius: 8px;
-      border: 1px solid transparent;
+      border: none;
       background: transparent;
       color: var(--text-muted);
       font-size: 14px;
@@ -192,7 +185,7 @@
       color: #fff;
     }
 
-    /* Main Stream / Feed */
+    /* Main Feed */
     #feed {
       flex: 1;
       overflow-y: auto;
@@ -203,70 +196,13 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Empty State */
+    /* Minimal Empty State */
     .empty-state {
       margin: auto 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       text-align: center;
-      padding: 24px 8px;
-    }
-    .empty-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 12px;
-    }
-    .empty-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .empty-sub {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 22px;
-      word-break: keep-all;
-    }
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      width: 100%;
-      max-width: 440px;
-    }
-    .quick-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 11px 13px;
-      text-align: left;
-      cursor: pointer;
-      transition: border-color 0.15s, transform 0.1s;
-    }
-    .quick-card:hover {
-      border-color: var(--text-dim);
-    }
-    .quick-card:active {
-      transform: scale(0.98);
-    }
-    .quick-card-title {
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-    .quick-card-sub {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      padding: 24px;
       color: var(--text-dim);
+      font-size: 0.9rem;
     }
 
     /* Conversation Turns */
@@ -277,16 +213,10 @@
       color: var(--text);
       padding: 10px 14px;
       border-radius: 16px 16px 4px 16px;
-      font-size: 0.93rem;
+      font-size: 0.94rem;
       line-height: 1.55;
       word-break: keep-all;
-    }
-    .turn-user .mode-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-dim);
-      display: block;
-      margin-bottom: 2px;
+      white-space: pre-wrap;
     }
 
     .turn-agent {
@@ -309,7 +239,7 @@
       font-weight: 600;
     }
 
-    /* Tool Execution Pills (Claude Code style) */
+    /* Tool Execution Steps */
     .tool-steps {
       display: flex;
       flex-direction: column;
@@ -342,17 +272,11 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 13px 15px;
-      font-size: 0.93rem;
+      font-size: 0.94rem;
       line-height: 1.7;
       color: var(--text);
       white-space: pre-wrap;
       word-break: break-word;
-    }
-    .agent-body.mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      line-height: 1.6;
-      background: #fcfcfd;
     }
     .agent-body.error {
       border-color: #fecaca;
@@ -386,7 +310,7 @@
       50% { opacity: 1; transform: scale(1.1); }
     }
 
-    /* Bottom Composer (Claude App style) */
+    /* Clean Single-Line/Auto-Expand Composer */
     .composer-wrap {
       padding: 8px 14px calc(12px + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
@@ -395,11 +319,11 @@
     .composer {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 10px 12px 8px 14px;
+      border-radius: 22px;
+      padding: 8px 8px 8px 16px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       display: flex;
-      flex-direction: column;
+      align-items: flex-end;
       gap: 8px;
       transition: border-color 0.15s;
     }
@@ -407,7 +331,7 @@
       border-color: #a1a1aa;
     }
     #prompt-input {
-      width: 100%;
+      flex: 1;
       border: none;
       outline: none;
       background: transparent;
@@ -415,6 +339,7 @@
       font-family: inherit;
       font-size: 0.95rem;
       line-height: 1.45;
+      padding: 4px 0;
       resize: none;
       max-height: 120px;
       min-height: 24px;
@@ -422,57 +347,16 @@
     #prompt-input::placeholder {
       color: var(--text-dim);
     }
-    .composer-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .composer-tools {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .mode-switch {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text-muted);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.12s;
-    }
-    .mode-switch.shell-mode {
-      background: var(--text);
-      border-color: var(--text);
-      color: #fff;
-    }
-    .mini-chip {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      color: var(--text-dim);
-      cursor: pointer;
-    }
-    .mini-chip:hover {
-      color: var(--text);
-      background: var(--surface-subtle);
-    }
     .send-btn {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       border: none;
       background: var(--text);
       color: #fff;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -487,15 +371,13 @@
   <div class="app">
     <!-- Top Header -->
     <header class="topbar">
-      <div class="topbar-left">
-        <span class="app-title">Remote Control</span>
-      </div>
+      <span class="app-title">Remote Control</span>
       <div class="topbar-right">
         <button type="button" class="node-pill" id="node-pill" onclick="toggleSettings()">
           <span class="status-dot"></span>
           <span id="node-label">Setup</span>
         </button>
-        <button type="button" class="icon-btn" onclick="resetSession()" title="New session" aria-label="Clear">↺</button>
+        <button type="button" class="icon-btn" onclick="resetSession()" title="Clear" aria-label="Clear">↺</button>
       </div>
     </header>
 
@@ -517,43 +399,14 @@
 
     <!-- Conversation Stream -->
     <main id="feed">
-      <div class="empty-state" id="empty-state">
-        <div class="empty-badge">iMac 24GB Node</div>
-        <div class="empty-title">무엇을 실행할까요?</div>
-        <div class="empty-sub">자연어로 에이전트에게 지시하거나 시스템 상태를 확인하세요.</div>
-        <div class="quick-grid">
-          <button type="button" class="quick-card" onclick="runQuick('status', true)">
-            <div class="quick-card-title">시스템 상태</div>
-            <div class="quick-card-sub">CPU · 메모리 · 디스크</div>
-          </button>
-          <button type="button" class="quick-card" onclick="runQuick('uptime', true)">
-            <div class="quick-card-title">가동 시간</div>
-            <div class="quick-card-sub">uptime &amp; load</div>
-          </button>
-          <button type="button" class="quick-card" onclick="runQuick('현재 실행 중인 주요 프로세스와 메모리 상태 요약해줘', false)">
-            <div class="quick-card-title">리소스 브리핑</div>
-            <div class="quick-card-sub">Agent 진단 요청</div>
-          </button>
-          <button type="button" class="quick-card" onclick="runQuick('df -h /', true)">
-            <div class="quick-card-title">스토리지 용량</div>
-            <div class="quick-card-sub">df -h /</div>
-          </button>
-        </div>
-      </div>
+      <div class="empty-state" id="empty-state">iMac에 무엇이든 물어보거나 지시하세요.</div>
     </main>
 
-    <!-- Claude Code style Composer -->
+    <!-- Pure Composer -->
     <div class="composer-wrap">
       <form class="composer" onsubmit="handleSubmit(event)">
-        <textarea id="prompt-input" rows="1" placeholder="iMac 에이전트에게 작업 지시…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        <div class="composer-bar">
-          <div class="composer-tools">
-            <button type="button" class="mode-switch" id="mode-switch" onclick="toggleMode()">✦ Agent</button>
-            <button type="button" class="mini-chip" onclick="runQuick('status', true)">status</button>
-            <button type="button" class="mini-chip" onclick="promptSay()">say</button>
-          </div>
-          <button type="submit" class="send-btn" aria-label="Send">↑</button>
-        </div>
+        <textarea id="prompt-input" rows="1" placeholder="메시지 입력…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <button type="submit" class="send-btn" aria-label="Send">↑</button>
       </form>
     </div>
   </div>
@@ -567,9 +420,6 @@
     const settingsDrawer = document.getElementById('settings-drawer');
     const cfgApi = document.getElementById('cfg-api');
     const cfgToken = document.getElementById('cfg-token');
-    const modeSwitch = document.getElementById('mode-switch');
-
-    let isShellMode = false;
 
     const getApi = () => localStorage.getItem('imac_api_endpoint') || '';
     const getToken = () => localStorage.getItem('imac_token') || '';
@@ -586,7 +436,7 @@
     function updateStatusUI() {
       const ok = Boolean(getApi());
       nodePill.classList.toggle('ready', ok);
-      nodeLabel.textContent = ok ? 'iMac 24GB' : 'Setup';
+      nodeLabel.textContent = ok ? 'iMac' : 'Setup';
     }
 
     function toggleSettings(force) {
@@ -611,28 +461,6 @@
       toggleSettings(false);
     }
 
-    function toggleMode() {
-      isShellMode = !isShellMode;
-      modeSwitch.classList.toggle('shell-mode', isShellMode);
-      modeSwitch.textContent = isShellMode ? '% Shell' : '✦ Agent';
-      promptInput.placeholder = isShellMode
-        ? '터미널 명령어 직접 입력 (예: ls -la, git status)…'
-        : 'iMac 에이전트에게 작업 지시…';
-      promptInput.focus();
-    }
-
-    function promptSay() {
-      isShellMode = true;
-      modeSwitch.classList.add('shell-mode');
-      modeSwitch.textContent = '% Shell';
-      promptInput.value = 'say ""';
-      promptInput.focus();
-      setTimeout(() => {
-        try { promptInput.setSelectionRange(5, 5); } catch (_) {}
-      }, 30);
-    }
-
-    // Auto-resize textarea & Enter to submit
     promptInput.addEventListener('input', () => {
       promptInput.style.height = 'auto';
       promptInput.style.height = Math.min(promptInput.scrollHeight, 120) + 'px';
@@ -653,41 +481,8 @@
       feed.scrollTop = feed.scrollHeight;
     }
 
-    function hideEmptyState() {
-      const empty = document.getElementById('empty-state');
-      if (empty) empty.remove();
-    }
-
     function resetSession() {
-      feed.innerHTML = `
-        <div class="empty-state" id="empty-state">
-          <div class="empty-badge">iMac 24GB Node</div>
-          <div class="empty-title">무엇을 실행할까요?</div>
-          <div class="empty-sub">자연어로 에이전트에게 지시하거나 시스템 상태를 확인하세요.</div>
-          <div class="quick-grid">
-            <button type="button" class="quick-card" onclick="runQuick('status', true)">
-              <div class="quick-card-title">시스템 상태</div>
-              <div class="quick-card-sub">CPU · 메모리 · 디스크</div>
-            </button>
-            <button type="button" class="quick-card" onclick="runQuick('uptime', true)">
-              <div class="quick-card-title">가동 시간</div>
-              <div class="quick-card-sub">uptime &amp; load</div>
-            </button>
-            <button type="button" class="quick-card" onclick="runQuick('현재 실행 중인 주요 프로세스와 메모리 상태 요약해줘', false)">
-              <div class="quick-card-title">리소스 브리핑</div>
-              <div class="quick-card-sub">Agent 진단 요청</div>
-            </button>
-            <button type="button" class="quick-card" onclick="runQuick('df -h /', true)">
-              <div class="quick-card-title">스토리지 용량</div>
-              <div class="quick-card-sub">df -h /</div>
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function runQuick(text, asShell) {
-      dispatchTask(text, asShell);
+      feed.innerHTML = `<div class="empty-state" id="empty-state">iMac에 무엇이든 물어보거나 지시하세요.</div>`;
     }
 
     function handleSubmit(e) {
@@ -696,10 +491,9 @@
       if (!raw) return;
       promptInput.value = '';
       promptInput.style.height = 'auto';
-      dispatchTask(raw, isShellMode);
+      dispatchAgent(raw);
     }
 
-    // Parse raw Antigravity server response into structured tool calls + clean body
     function parseAgentOutput(raw) {
       const lines = raw.split('\n');
       const tools = [];
@@ -729,25 +523,13 @@
       };
     }
 
-    async function dispatchTask(text, asShell) {
-      hideEmptyState();
+    async function dispatchAgent(text) {
+      const empty = document.getElementById('empty-state');
+      if (empty) empty.remove();
 
-      // Allow explicit prefix overrides
-      let finalCmd = text;
-      let runAsShell = asShell;
-      if (text.startsWith('$ ')) {
-        finalCmd = text.slice(2).trim();
-        runAsShell = true;
-      } else if (text.startsWith('agent ')) {
-        runAsShell = false;
-      } else if (!runAsShell) {
-        finalCmd = `agent "${text.replace(/"/g, '\\"')}"`;
-      }
-
-      // Append user bubble
       const userEl = document.createElement('div');
       userEl.className = 'turn-user';
-      userEl.innerHTML = `${runAsShell ? '<span class="mode-tag">SHELL</span>' : ''}${esc(text)}`;
+      userEl.textContent = text;
       feed.appendChild(userEl);
 
       if (!getApi()) {
@@ -760,17 +542,18 @@
         return;
       }
 
-      // Append agent turn with thinking state
       const agentTurn = document.createElement('div');
       agentTurn.className = 'turn-agent';
       agentTurn.innerHTML = `
         <div class="thinking-row">
           <span class="pulse-dot"></span>
-          <span>${runAsShell ? 'Running on iMac…' : 'Thinking on iMac…'}</span>
+          <span>iMac 작업 중…</span>
         </div>
       `;
       feed.appendChild(agentTurn);
       scrollToBottom();
+
+      const finalCmd = `agent "${text.replace(/"/g, '\\"')}"`;
 
       try {
         const res = await fetch(getApi() + '/api/exec', {
@@ -781,31 +564,24 @@
         const data = await res.json();
 
         if (res.status === 401) {
-          agentTurn.innerHTML = `<div class="agent-body error">인증 실패: 우측 상단 [iMac 24GB] 버튼을 눌러 올바른 Token을 입력하세요.</div>`;
+          agentTurn.innerHTML = `<div class="agent-body error">인증 실패: 우측 상단 [iMac] 버튼을 눌러 올바른 Token을 입력하세요.</div>`;
         } else if (data.error) {
           agentTurn.innerHTML = `<div class="agent-body error">${esc(data.error.trim())}</div>`;
         } else if (data.output) {
-          if (runAsShell) {
-            agentTurn.innerHTML = `
-              <div class="agent-header"><strong>zsh</strong><span>completed</span></div>
-              <div class="agent-body mono">${esc(data.output.replace(/\n$/, ''))}</div>
-            `;
-          } else {
-            const parsed = parseAgentOutput(data.output);
-            const toolsHtml = parsed.tools.length
-              ? `<div class="tool-steps">${parsed.tools.map(t => `<div class="tool-pill"><span class="tool-pill-icon">⚙</span><span>${esc(t)}</span></div>`).join('')}</div>`
-              : '';
-            agentTurn.innerHTML = `
-              <div class="agent-header"><strong>Antigravity</strong><span>${esc(parsed.elapsed || 'completed')}</span></div>
-              ${toolsHtml}
-              <div class="agent-body">${esc(parsed.body)}</div>
-            `;
-          }
+          const parsed = parseAgentOutput(data.output);
+          const toolsHtml = parsed.tools.length
+            ? `<div class="tool-steps">${parsed.tools.map(t => `<div class="tool-pill"><span class="tool-pill-icon">⚙</span><span>${esc(t)}</span></div>`).join('')}</div>`
+            : '';
+          agentTurn.innerHTML = `
+            <div class="agent-header"><strong>iMac</strong><span>${esc(parsed.elapsed || '')}</span></div>
+            ${toolsHtml}
+            <div class="agent-body">${esc(parsed.body)}</div>
+          `;
         } else {
-          agentTurn.innerHTML = `<div class="agent-body mono">(no output)</div>`;
+          agentTurn.innerHTML = `<div class="agent-body">완료되었습니다.</div>`;
         }
       } catch (err) {
-        agentTurn.innerHTML = `<div class="agent-body error">연결 실패 (${esc(err.message)}). 상단 설정에서 Endpoint URL을 확인하세요.</div>`;
+        agentTurn.innerHTML = `<div class="agent-body error">연결 실패 (${esc(err.message)}). 상단 [iMac] 설정에서 주소를 확인하세요.</div>`;
       }
       scrollToBottom();
     }
