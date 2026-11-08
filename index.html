@@ -420,25 +420,45 @@
 
     /* Footer */
     footer {
-      margin-top: 50px;
-      padding-top: 20px;
+      margin-top: 56px;
+      padding-top: 28px;
       border-top: 1px solid var(--border);
       display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      color: var(--text-dim);
-      font-family: 'JetBrains Mono', monospace;
+      flex-direction: column;
+      gap: 20px;
     }
-    body.terminal-active footer {
-      border-top-color: var(--term-border);
+    body.terminal-active footer { border-top-color: var(--term-border); }
+    .footer-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .footer-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.7;
     }
     .footer-link {
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.2s;
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
     }
-    .footer-link:hover { color: var(--text); }
-    body.terminal-active .footer-link:hover { color: #fff; }
+    .footer-link:hover { text-decoration-color: var(--text); }
+    body.terminal-active .footer-text { color: var(--term-dim); }
+    body.terminal-active .footer-link { color: #fff; text-decoration-color: var(--term-border); }
+    body.terminal-active .footer-link:hover { text-decoration-color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+    }
   </style>
 </head>
 <body>
@@ -576,8 +596,16 @@
 
     <!-- Footer -->
     <footer>
-      <span>© 2026 wooyoung.me</span>
-      <a href="mailto:fz7948@gmail.com" class="footer-link">email</a>
+      <div>
+        <div class="footer-label">Connect</div>
+        <p class="footer-text">
+          연락은 <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a> 으로 주세요.
+        </p>
+      </div>
+      <div class="footer-bottom">
+        <span>천천히, 꾸준히 기록합니다.</span>
+        <span>2026</span>
+      </div>
     </footer>
   </div>
 
