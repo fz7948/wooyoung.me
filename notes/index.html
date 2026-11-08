@@ -16,6 +16,22 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
+    header {
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .nav-back {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-back:hover {
+      color: var(--text);
+    }
     .log-list { display: flex; flex-direction: column; }
     .log-item {
       cursor: pointer;
@@ -92,16 +108,7 @@
 <body>
   <div class="container">
     <header>
-      <div class="menu-wrap">
-        <button class="menu-btn" id="menu-btn" aria-label="Menu" onclick="toggleMenu(event)">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="menu-panel" id="menu-panel">
-          <a class="menu-item" href="/">Home</a>
-          <a class="menu-item active" href="/notes/">Notes</a>
-          <a class="menu-item" href="/terminal/">Terminal</a>
-        </div>
-      </div>
+      <a href="/" class="nav-back">← Wooyoung</a>
     </header>
 
     <div id="view-notes">
@@ -171,7 +178,9 @@
     <footer>
       <div class="footer-label">Connect</div>
       <p class="footer-text">
-        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>.
+        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>, 
+        <a href="https://github.com/fz7948" target="_blank" rel="noopener" class="footer-link">GitHub</a>, or 
+        <a href="https://fz7948.tistory.com" target="_blank" rel="noopener" class="footer-link">Blog</a>.
       </p>
     </footer>
   </div>

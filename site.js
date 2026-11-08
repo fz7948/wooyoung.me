@@ -16,3 +16,13 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Secret shortcut to terminal: press ` or ~ anywhere
+window.addEventListener('keydown', (e) => {
+  if ((e.key === '`' || e.key === '~') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      window.location.href = '/terminal/';
+    }
+  }
+});
+
