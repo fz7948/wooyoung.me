@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Notes — wooyoung.me</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#fafafa">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="wooyoung.me">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .log-list { display: flex; flex-direction: column; }
+    .log-item {
+      cursor: pointer;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .log-item:first-child { padding-top: 8px; }
+    .log-item:last-child { border-bottom: none; }
+    .log-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .log-title {
+      font-size: 1.28rem;
+      font-weight: 650;
+      color: var(--text);
+      letter-spacing: -0.025em;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      word-break: keep-all;
+    }
+    .log-preview {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      word-break: keep-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .log-content {
+      display: none;
+      font-size: 1rem;
+      color: #1f2937;
+      line-height: 1.95;
+      word-break: keep-all;
+    }
+    .log-content p { margin-bottom: 18px; }
+    .log-content p:last-child { margin-bottom: 0; }
+    .log-content blockquote {
+      border-left: 2px solid var(--text);
+      padding: 2px 0 2px 18px;
+      margin: 24px 0;
+      color: var(--text);
+      font-size: 1.02rem;
+      font-weight: 500;
+      line-height: 1.8;
+    }
+    .back-link {
+      display: none;
+      background: none;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 28px;
+    }
+    .back-link:hover { color: var(--text); }
+    #view-notes.reading .back-link { display: inline-block; }
+    #view-notes.reading .log-item:not(.active) { display: none; }
+    #view-notes.reading .log-item.active { cursor: default; padding: 0 0 12px; border-bottom: none; }
+    #view-notes.reading .log-item.active .log-title { font-size: 1.7rem; margin-bottom: 28px; }
+    #view-notes.reading .log-item.active .log-preview { display: none; }
+    #view-notes.reading .log-item.active .log-content { display: block; animation: fadeIn 0.3s ease-out; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" onclick="toggleMenu(event)">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="menu-panel" id="menu-panel">
+          <a class="menu-item" href="/">Home</a>
+          <a class="menu-item active" href="/notes/">Notes</a>
+          <a class="menu-item" href="/terminal/">Terminal</a>
+        </div>
+      </div>
+    </header>
+
+    <div id="view-notes">
+      <button class="back-link" onclick="closePost()">← Notes</button>
+      <main class="log-list">
+
+        <!-- Entry 1 -->
+        <article class="log-item" onclick="openPost(this)">
+          <div class="log-date">2026. 11. 08 (일)</div>
+          <h2 class="log-title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</h2>
+          <p class="log-preview">
+            방구석에 오래 잠들어 있던 2015 아이맥 27인치를 다시 살려냈다. 8GB였던 램을 24GB로 올리고, 상시 가동되는 AI 서버로 세팅했다.
+          </p>
+          <div class="log-content">
+            <p>
+              M2 Pro 맥북 16인치가 주력이지만, 무거운 AI 작업이나 백그라운드 프로세스까지 맥북 한 대에 다 몰아넣는 건 왠지 아쉬웠다. 구형 아이맥 27인치 5K는 화면도 넓고 램 슬롯도 4개나 있어서 자율 AI 서버로 쓰기에 아주 알맞았다.
+            </p>
+            <p>
+              DDR3L 1866MHz 8GB 램 2개를 추가해 총 24GB를 만들고, Tailscale로 맥북과 아이맥을 묶었다. 스마트폰에서 SSH를 쓸 때 한글이 깨지는 문제가 거슬려서 모바일 웹 터미널을 직접 하나 짰다.
+            </p>
+            <blockquote>
+              "침대에 누워서 갤럭시 폰으로 'agent 이거 만들어줘'라고 한글로 치면, 서재의 아이맥이 알아서 코드를 짜고 바탕화면에 파일을 저장한다."
+            </blockquote>
+            <p>
+              거창한 클라우드 결제 없이도 집에 있는 하드웨어끼리 연결해서 나만의 시스템을 만들어가는 과정이 꽤나 재미있다.
+            </p>
+          </div>
+        </article>
+
+        <!-- Entry 2 -->
+        <article class="log-item" onclick="openPost(this)">
+          <div class="log-date">2026. 11. 07 (토)</div>
+          <h2 class="log-title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</h2>
+          <p class="log-preview">
+            처음에는 웹사이트에 멋진 슬로건도 넣고 회사 포트폴리오처럼 꾸며볼까 고민했다. 하지만 아직 구체적인 사업 방향이 정해지지도 않았는데 껍데기부터 만드는 건 맞지 않았다.
+          </p>
+          <div class="log-content">
+            <p>
+              남들에게 보여주기 위한 화려한 랜딩페이지보다는, 내가 매일 부딪히고 만들어낸 결과들을 일기처럼 솔직하게 쌓아가는 도화지 같은 공간이 훨씬 자연스럽다.
+            </p>
+            <p>
+              글이 10개, 50개 쌓이다 보면 내가 진짜 무엇을 좋아하고 어떤 가치를 만들어낼 수 있는지 자연스럽게 방향이 보일 것이다. 군더더기를 다 덜어내고 글씨와 생각에만 집중할 수 있는 이 형식이 마음에 든다.
+            </p>
+          </div>
+        </article>
+
+        <!-- Entry 3 -->
+        <article class="log-item" onclick="openPost(this)">
+          <div class="log-date">2026. 11. 05 (목)</div>
+          <h2 class="log-title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</h2>
+          <p class="log-preview">
+            AI 도구가 쏟아지는 시대지만, 결국 가장 중요한 건 '내가 무엇을 하고 싶은가'라는 주도권이다.
+          </p>
+          <div class="log-content">
+            <p>
+              새로운 기술이 나올 때마다 허겁지겁 따라가는 것보다, 내 일상과 개발 환경에 딱 필요한 만큼만 실용적으로 녹여내는 훈련을 하고 있다.
+            </p>
+            <p>
+              혼자서도 도구들을 레버리지해서 더 밀도 있게 일하는 법을 계속 실험해볼 생각이다.
+            </p>
+          </div>
+        </article>
+
+      </main>
+    </div>
+
+    <footer>
+      <div class="footer-label">Connect</div>
+      <p class="footer-text">
+        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>.
+      </p>
+    </footer>
+  </div>
+  <script src="/site.js"></script>
+  <script>
+    const posts = Array.from(document.querySelectorAll('.log-item'));
+    posts.forEach((el, i) => { el.dataset.id = 'post-' + (i + 1); });
+    function openPost(el) { location.hash = el.dataset.id; }
+    function closePost() {
+      if (location.hash) history.pushState('', document.title, location.pathname);
+      renderRoute();
+    }
+    function renderRoute() {
+      const target = posts.find(p => p.dataset.id === location.hash.slice(1));
+      posts.forEach(p => p.classList.toggle('active', p === target));
+      document.getElementById('view-notes').classList.toggle('reading', !!target);
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('hashchange', renderRoute);
+    renderRoute();
+  </script>
+</body>
+</html>
