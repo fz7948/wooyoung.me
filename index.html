@@ -3,89 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Wooyoung</title>
+  <title>Wooyoung Oh — Front-end Developer</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#fafafa">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="wooyoung.me">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
-    .intro { padding-top: 56px; }
+    .intro { padding-top: 48px; }
     h1.name {
-      font-size: 1.5rem;
-      font-weight: 650;
+      font-size: 1.65rem;
+      font-weight: 700;
       letter-spacing: -0.03em;
-      line-height: 1.3;
+      line-height: 1.25;
+      color: var(--text);
     }
-    .tagline { font-size: 1.05rem; color: var(--text-muted); margin-top: 2px; }
-    .bio { margin-top: 18px; font-size: 1rem; color: var(--text-muted); line-height: 1.85; word-break: keep-all; }
-    .section { margin-top: 44px; }
+    .tagline { 
+      font-size: 1.02rem; 
+      color: var(--text-muted); 
+      margin-top: 5px;
+      font-weight: 450;
+      letter-spacing: -0.01em;
+    }
+    .bio { 
+      margin-top: 20px; 
+      font-size: 0.96rem; 
+      color: var(--text-muted); 
+      line-height: 1.85; 
+      word-break: keep-all; 
+    }
+    .section { margin-top: 48px; }
     .section-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-dim);
-      margin-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .exp-item {
+      margin-bottom: 24px;
+    }
+    .exp-item:last-child {
+      margin-bottom: 0;
     }
     .row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 16px;
-      padding: 7px 0;
+      padding: 2px 0;
       text-decoration: none;
       color: var(--text);
     }
-    .row .title { font-size: 1rem; font-weight: 500; word-break: keep-all; }
+    .row .title { 
+      font-size: 1.02rem; 
+      font-weight: 600; 
+      word-break: keep-all; 
+    }
     .row .meta {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.74rem;
       color: var(--text-dim);
       white-space: nowrap;
     }
-    .row:hover .title { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border); }
-    .desc { font-size: 0.9rem; color: var(--text-dim); margin-top: -4px; padding-bottom: 6px; }
+    .role-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: -2px;
+      margin-bottom: 6px;
+    }
+    .desc { 
+      font-size: 0.88rem; 
+      color: var(--text-muted); 
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+    .details-list {
+      margin-top: 6px;
+      padding-left: 18px;
+      list-style-type: square;
+    }
+    .details-list li {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 3px;
+      word-break: keep-all;
+    }
+    .details-list li::marker {
+      color: var(--text-dim);
+      font-size: 0.75em;
+    }
+    .row:hover .title { 
+      text-decoration: underline; 
+      text-underline-offset: 3px; 
+      text-decoration-color: var(--border); 
+    }
+    .more-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .more-link:hover {
+      color: var(--text);
+    }
+    .skill-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .skill-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      background: var(--border-subtle);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    body.dark .skill-pill {
+      background: var(--term-card);
+      border-color: var(--term-border);
+      color: var(--term-dim);
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="intro">
-      <h1 class="name">Wooyoung</h1>
-      <div class="tagline">Building with AI at home.</div>
+      <h1 class="name">Wooyoung Oh</h1>
+      <div class="tagline">Crafting web interfaces &amp; autonomous AI systems.</div>
       <p class="bio">
-        한 사람이 AI 에이전트와 집에 있는 기계 몇 대로 어디까지 갈 수 있는지 실험하고 있습니다.
-        그 과정에서 배운 것을 이곳에 기록합니다.
+        동료와 함께 성장하는 프론트엔드 개발자 오우영입니다. 1인 단독 리드부터 크로스플랫폼 아키텍처 설계까지, 사용자 경험과 프로덕트의 가치를 실현하는 인터페이스를 만듭니다. 지식은 공유할 때 가장 큰 시너지가 난다고 믿으며, 최근에는 자율 가동 AI 에이전트와 분산 로컬 컴퓨팅 환경을 결합해 개발 생산성의 한계를 실험하고 있습니다.
       </p>
 
+      <!-- Experience Section -->
+      <div class="section">
+        <div class="section-label">Work Experience</div>
+        
+        <!-- Fitners -->
+        <div class="exp-item">
+          <div class="row">
+            <span class="title">Fitners (피트너스)</span>
+            <span class="meta">2025.01 — 2026.10</span>
+          </div>
+          <div class="role-subtitle">Solo Lead Frontend Developer</div>
+          <div class="desc">에이블짐 B2B/B2C 서비스 생태계(모바일 앱 2종, 웹 3종)의 아키텍처 설계부터 릴리즈·운영 전 과정 총괄.</div>
+          <ul class="details-list">
+            <li>회원용 수업 예약 앱 및 트레이너용 PT 관리 크로스플랫폼 앱 2종 개발</li>
+            <li>통합 CRM, 전사 백오피스 어드민, 반응형 브랜드 랜딩 등 웹 프로덕트 3종 구축</li>
+            <li>5개 프로덕트의 빠른 출시를 위한 공통 디자인 시스템 UI 및 API 모듈화, 엄격한 TypeScript 컨벤션 수립</li>
+          </ul>
+        </div>
+
+        <!-- Illuminarean -->
+        <div class="exp-item">
+          <div class="row">
+            <a href="https://illuminarean.com/" target="_blank" rel="noopener" class="title" style="text-decoration:none;color:inherit;">Illuminarean (일루미나리안) ↗</a>
+            <span class="meta">2023.06 — 2024.11</span>
+          </div>
+          <div class="role-subtitle">Frontend Developer</div>
+          <div class="desc">엔터테인먼트 정산 플랫폼, 에너지 투자 플랫폼 및 공식 웹사이트 개발.</div>
+          <ul class="details-list">
+            <li>정산 플랫폼 폼 상태 개선(react-hook-form) 및 스택 구조 모달 라우팅 시스템 설계</li>
+            <li>빌드 타임에 규격별 이미지를 사전 생성해 서버 부하를 줄이는 Webpack Custom Loader 개발</li>
+            <li>에너지 투자 플랫폼 공통 비즈니스 로직 라이브러리화 및 인턴십 기술 멘토링 주도</li>
+          </ul>
+        </div>
+
+        <!-- Autowini -->
+        <div class="exp-item">
+          <div class="row">
+            <span class="title">Autowini (오토위니)</span>
+            <span class="meta">2022.11 — 2023.03</span>
+          </div>
+          <div class="role-subtitle">Frontend Developer</div>
+          <div class="desc">글로벌 중고차 해외 수출 이커머스 플랫폼 및 물류 관리 시스템 개발.</div>
+          <ul class="details-list">
+            <li>오토위니 럭셔리관 신규 론칭 및 React-I18next 기반 구글 시트 연동 다국어 체계 구축</li>
+            <li>선적 예약 관리를 위한 로지스 어드민 신규 개발 (Compound Component &amp; Render Props 패턴)</li>
+            <li>팀 내 주간 JS/React 세미나 및 상호 코드 리뷰 문화 정착 주도</li>
+          </ul>
+        </div>
+
+        <!-- Ahalabs -->
+        <div class="exp-item">
+          <div class="row">
+            <span class="title">Ahalabs (아하랩스)</span>
+            <span class="meta">2021.12 — 2022.09</span>
+          </div>
+          <div class="role-subtitle">Frontend Developer</div>
+          <div class="desc">CCTV 딥러닝 영상 분석 및 머신비전 이상 검출 플랫폼 대시보드 구축.</div>
+          <ul class="details-list">
+            <li>mpegts.js 기반 실시간 CCTV 다채널 영상 스트리밍 서비스 구현</li>
+            <li>Fabric.js를 활용한 가변 해상도 비디오 ROI(관심영역) 어노테이션 도구 및 반응형 인터랙션 설계</li>
+            <li>대용량 이상 감지 시계열 데이터 시각화(Recharts) 및 비동기 렌더링 성능 최적화</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="section">
+        <div class="section-label">Core Capabilities</div>
+        <div class="skill-pills">
+          <span class="skill-pill">TypeScript</span>
+          <span class="skill-pill">JavaScript (ES6+)</span>
+          <span class="skill-pill">React</span>
+          <span class="skill-pill">Next.js</span>
+          <span class="skill-pill">React Native</span>
+          <span class="skill-pill">React Query</span>
+          <span class="skill-pill">Redux Toolkit</span>
+          <span class="skill-pill">Recoil</span>
+          <span class="skill-pill">Webpack</span>
+          <span class="skill-pill">Fabric.js</span>
+          <span class="skill-pill">Tailwind CSS</span>
+          <span class="skill-pill">Git / GitHub</span>
+        </div>
+      </div>
+
+      <!-- Projects & Labs Section -->
+      <div class="section">
+        <div class="section-label">Projects &amp; Labs</div>
+        
+        <div class="exp-item">
+          <div class="row">
+            <span class="title">Autonomous iMac 24GB AI Node</span>
+            <span class="meta">Local Cluster</span>
+          </div>
+          <div class="desc">2015 5K iMac 메모리를 24GB로 증설하고, Tailscale 보안 메시 및 Cloudflare 터널 기반 24시간 자율 가동 안티그래비티 AI 에이전트 백엔드 구축.</div>
+        </div>
+
+        <div class="exp-item">
+          <a class="row" href="/terminal/">
+            <span class="title">Mobile Korean CLI Terminal</span>
+            <span class="meta">Remote Hub ↗</span>
+          </a>
+          <div class="desc">모바일 브라우저 한글 IME 조합 문제와 터미널 에코를 해결하여 스마트폰에서 간편하게 로컬 AI 작업을 지시·수신하는 PWA 원격 제어 인터페이스.</div>
+        </div>
+
+        <div class="exp-item">
+          <div class="row">
+            <span class="title">FoodRiend</span>
+            <span class="meta">Web App</span>
+          </div>
+          <div class="desc">지인 네트워크 기반의 신뢰성 높은 맛집 리스트를 기록하고 큐레이션하여 공유하는 소셜 웹 서비스.</div>
+        </div>
+      </div>
+
+      <!-- Notes / Writing Section -->
       <div class="section">
         <div class="section-label">Notes</div>
         <a class="row" href="/notes/#post-1"><span class="title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</span><span class="meta">2026. 11. 08</span></a>
         <a class="row" href="/notes/#post-2"><span class="title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</span><span class="meta">2026. 11. 07</span></a>
         <a class="row" href="/notes/#post-3"><span class="title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</span><span class="meta">2026. 11. 05</span></a>
-        <a class="row" href="/notes/"><span class="title">All notes</span><span class="meta">→</span></a>
-      </div>
-
-      <div class="section">
-        <div class="section-label">Tools</div>
-        <a class="row" href="/terminal/"><span class="title">Terminal</span><span class="meta">remote control</span></a>
-        <div class="desc">집에 있는 iMac에 폰으로 작업을 시키는 도구.</div>
+        <a class="more-link" href="/notes/">All notes →</a>
       </div>
     </div>
 
+    <!-- Footer -->
     <footer>
       <div class="footer-label">Connect</div>
       <p class="footer-text">
-        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>.
+        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>, 
+        <a href="https://github.com/fz7948" target="_blank" rel="noopener" class="footer-link">GitHub</a>, or 
+        <a href="https://fz7948.tistory.com" target="_blank" rel="noopener" class="footer-link">Blog</a>.
       </p>
     </footer>
   </div>
+
   <script src="/site.js"></script>
 </body>
 </html>

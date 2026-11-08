@@ -136,3 +136,4 @@ footer { margin-top: 56px; }
 body.dark .footer-text { color: var(--term-dim); }
 body.dark .footer-link { color: #fff; text-decoration-color: var(--term-border); }
 body.dark .footer-link:hover { text-decoration-color: #fff; }
+
