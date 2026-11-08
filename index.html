@@ -190,26 +190,35 @@
       border-bottom: 1px solid var(--border);
     }
     .log-item:first-child { padding-top: 8px; }
-    /* Plus / minus toggle */
-    .log-item::before,
-    .log-item::after {
-      content: '';
-      position: absolute;
-      right: 2px;
-      top: 42px;
-      width: 12px;
-      height: 1.5px;
-      background: var(--text-dim);
-      border-radius: 1px;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, opacity 0.2s;
+    .log-item:hover .log-title { color: var(--accent); }
+    .log-title { transition: color 0.2s; }
+
+    /* Reader mode (single post page) */
+    .back-link {
+      display: none;
+      background: none;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 28px;
     }
-    .log-item:first-child::before,
-    .log-item:first-child::after { top: 22px; }
-    .log-item::after { transform: rotate(90deg); }
-    .log-item.active::after { transform: rotate(0deg); opacity: 0; }
-    .log-item.active::before,
-    .log-item:hover::before,
-    .log-item:hover::after { background: var(--text); }
+    .back-link:hover { color: var(--text); }
+    #view-notes.reading .back-link { display: inline-block; }
+    #view-notes.reading .log-item:not(.active) { display: none; }
+    #view-notes.reading .log-item.active {
+      cursor: default;
+      padding: 0 0 12px;
+      border-bottom: none;
+    }
+    #view-notes.reading .log-item.active .log-title {
+      font-size: 1.7rem;
+      line-height: 1.4;
+      margin-bottom: 28px;
+    }
+    #view-notes.reading .log-item.active:hover .log-title { color: var(--text); }
 
     .log-date {
       font-family: 'JetBrains Mono', monospace;
@@ -458,10 +467,11 @@
 
     <!-- VIEW 1: Notes / Blog -->
     <div id="view-notes">
+      <button class="back-link" onclick="closePost()">← 목록</button>
       <main class="log-list">
 
         <!-- Entry 1 -->
-        <article class="log-item active" onclick="toggleLog(this)">
+        <article class="log-item" onclick="openPost(this)">
           <div class="log-date">2026. 11. 08 (일)</div>
           <h2 class="log-title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</h2>
           <p class="log-preview">
@@ -484,7 +494,7 @@
         </article>
 
         <!-- Entry 2 -->
-        <article class="log-item" onclick="toggleLog(this)">
+        <article class="log-item" onclick="openPost(this)">
           <div class="log-date">2026. 11. 07 (토)</div>
           <h2 class="log-title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</h2>
           <p class="log-preview">
@@ -501,7 +511,7 @@
         </article>
 
         <!-- Entry 3 -->
-        <article class="log-item" onclick="toggleLog(this)">
+        <article class="log-item" onclick="openPost(this)">
           <div class="log-date">2026. 11. 05 (목)</div>
           <h2 class="log-title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</h2>
           <p class="log-preview">
@@ -590,6 +600,7 @@
     // View Switcher
     function switchView(viewName) {
       setMenu(false);
+      if (viewName === 'notes' && location.hash) closePost();
       const isTerm = (viewName === 'terminal');
       document.body.classList.toggle('terminal-active', isTerm);
       document.getElementById('view-notes').style.display = isTerm ? 'none' : 'block';
@@ -606,12 +617,26 @@
       }
     }
 
-    // Journal Accordion
-    function toggleLog(element) {
-      const wasActive = element.classList.contains('active');
-      document.querySelectorAll('.log-item').forEach(el => el.classList.remove('active'));
-      if (!wasActive) element.classList.add('active');
+    // Journal: list -> single post reader (hash routed, browser back works)
+    const posts = Array.from(document.querySelectorAll('.log-item'));
+    posts.forEach((el, i) => { el.dataset.id = 'post-' + (i + 1); });
+
+    function openPost(el) {
+      location.hash = el.dataset.id;
     }
+    function closePost() {
+      if (location.hash) history.pushState('', document.title, location.pathname);
+      renderRoute();
+    }
+    function renderRoute() {
+      const id = location.hash.slice(1);
+      const target = posts.find(p => p.dataset.id === id);
+      posts.forEach(p => p.classList.toggle('active', p === target));
+      document.getElementById('view-notes').classList.toggle('reading', !!target);
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('hashchange', renderRoute);
+    renderRoute();
 
     // Terminal Logic
     const screen = document.getElementById("terminal-screen");
