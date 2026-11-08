@@ -16,6 +16,18 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
+    .lucide-inline {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 1.85;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      display: inline-block;
+      vertical-align: -2px;
+      margin-right: 4px;
+    }
     header {
       margin-bottom: 28px;
       display: flex;
@@ -108,11 +120,11 @@
 <body>
   <div class="container">
     <header>
-      <a href="/" class="nav-back">← Wooyoung</a>
+      <a href="/" class="nav-back"><svg class="lucide-inline" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Wooyoung</a>
     </header>
 
     <div id="view-notes">
-      <button class="back-link" onclick="closePost()">← Notes</button>
+      <button class="back-link" onclick="closePost()"><svg class="lucide-inline" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Notes</button>
       <main class="log-list">
 
         <!-- Entry 1 -->

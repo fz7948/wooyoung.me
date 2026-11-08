@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Remote">
   <link rel="apple-touch-icon" href="/icon-192.png">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -44,6 +44,17 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    .lucide {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.85;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+
     .app {
       max-width: 640px;
       margin: 0 auto;
@@ -66,6 +77,26 @@
       -webkit-backdrop-filter: blur(10px);
       flex-shrink: 0;
       z-index: 10;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+    .brand-icon .lucide {
+      width: 14px;
+      height: 14px;
     }
     .app-title {
       font-size: 0.92rem;
@@ -102,21 +133,25 @@
       box-shadow: none;
     }
     .icon-btn {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
       color: var(--text-muted);
-      font-size: 14px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.15s;
     }
     .icon-btn:hover {
-      background: var(--surface-subtle);
+      background: var(--surface);
+      border-color: var(--border);
       color: var(--text);
+    }
+    .icon-btn:active {
+      transform: scale(0.95);
     }
 
     /* Main Feed */
@@ -133,8 +168,30 @@
     /* Minimal Empty State */
     .empty-state {
       margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
       padding: 24px;
+      gap: 12px;
+    }
+    .empty-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .empty-icon-box .lucide {
+      width: 20px;
+      height: 20px;
+    }
+    .empty-text {
       color: var(--text-dim);
       font-size: 0.9rem;
     }
@@ -163,10 +220,15 @@
     .agent-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--text-dim);
+    }
+    .agent-header .lucide {
+      width: 13px;
+      height: 13px;
+      color: var(--text);
     }
     .agent-header strong {
       color: var(--text);
@@ -182,22 +244,32 @@
     .tool-pill {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11.5px;
       color: var(--text-muted);
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 6px 10px;
+      padding: 6px 11px;
       border-radius: 8px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .tool-pill-icon {
+    .tool-pill .lucide {
+      width: 13px;
+      height: 13px;
       color: var(--text-dim);
-      font-size: 11px;
-      flex-shrink: 0;
+    }
+    .tool-pill-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tool-pill .check-icon {
+      color: var(--green);
+      width: 13px;
+      height: 13px;
     }
 
     /* Response Card */
@@ -218,7 +290,7 @@
       color: #b91c1c;
     }
 
-    /* Thinking Pulse */
+    /* Thinking Spinner */
     .thinking-row {
       display: inline-flex;
       align-items: center;
@@ -232,19 +304,17 @@
       border-radius: 10px;
       width: fit-content;
     }
-    .pulse-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--text);
-      animation: pulse 1.2s infinite ease-in-out;
+    .spin {
+      width: 14px;
+      height: 14px;
+      animation: spin 1s linear infinite;
+      color: var(--text);
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.25; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.1); }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
-    /* Clean Single-Line/Auto-Expand Composer */
+    /* Composer */
     .composer-wrap {
       padding: 8px 14px calc(12px + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
@@ -254,7 +324,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 22px;
-      padding: 8px 8px 8px 16px;
+      padding: 7px 7px 7px 16px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       display: flex;
       align-items: flex-end;
@@ -273,7 +343,7 @@
       font-family: inherit;
       font-size: 0.95rem;
       line-height: 1.45;
-      padding: 4px 0;
+      padding: 5px 0;
       resize: none;
       max-height: 120px;
       min-height: 24px;
@@ -282,19 +352,23 @@
       color: var(--text-dim);
     }
     .send-btn {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       border: none;
       background: var(--text);
       color: #fff;
-      font-size: 15px;
       cursor: pointer;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: opacity 0.15s, transform 0.1s;
+    }
+    .send-btn .lucide {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.2;
     }
     .send-btn:active {
       transform: scale(0.93);
@@ -305,26 +379,57 @@
   <div class="app">
     <!-- Top Header -->
     <header class="topbar">
-      <span class="app-title">Remote Control</span>
+      <div class="topbar-left">
+        <div class="brand-icon">
+          <!-- Lucide: Cpu -->
+          <svg class="lucide" viewBox="0 0 24 24">
+            <rect width="16" height="16" x="4" y="4" rx="2"/>
+            <rect width="6" height="6" x="9" y="9" rx="1"/>
+            <path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>
+          </svg>
+        </div>
+        <span class="app-title">Remote Control</span>
+      </div>
       <div class="topbar-right">
         <div class="node-pill" id="node-pill">
           <span class="status-dot"></span>
           <span id="node-label">iMac</span>
         </div>
-        <button type="button" class="icon-btn" onclick="resetSession()" title="Clear" aria-label="Clear">↺</button>
+        <button type="button" class="icon-btn" onclick="resetSession()" title="새 대화" aria-label="New session">
+          <!-- Lucide: RotateCcw -->
+          <svg class="lucide" viewBox="0 0 24 24">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
       </div>
     </header>
 
     <!-- Conversation Stream -->
     <main id="feed">
-      <div class="empty-state" id="empty-state">iMac에 무엇이든 물어보거나 지시하세요.</div>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon-box">
+          <!-- Lucide: Sparkles -->
+          <svg class="lucide" viewBox="0 0 24 24">
+            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+            <path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>
+          </svg>
+        </div>
+        <div class="empty-text">iMac에 무엇이든 물어보거나 지시하세요.</div>
+      </div>
     </main>
 
     <!-- Pure Composer -->
     <div class="composer-wrap">
       <form class="composer" onsubmit="handleSubmit(event)">
         <textarea id="prompt-input" rows="1" placeholder="메시지 입력…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        <button type="submit" class="send-btn" aria-label="Send">↑</button>
+        <button type="submit" class="send-btn" aria-label="Send">
+          <!-- Lucide: ArrowUp -->
+          <svg class="lucide" viewBox="0 0 24 24">
+            <path d="m5 12 7-7 7 7"/>
+            <path d="M12 19V5"/>
+          </svg>
+        </button>
       </form>
     </div>
   </div>
@@ -335,9 +440,23 @@
     const promptInput = document.getElementById('prompt-input');
     const nodePill = document.getElementById('node-pill');
 
-    // Direct Tailscale endpoints (only reachable when Tailscale VPN is active on this device)
     const TAILSCALE_HTTPS = 'https://apple-imac.tailffd5d4.ts.net';
     const TAILSCALE_HTTP = 'http://100.119.171.74:8888';
+
+    // Lucide inline SVG templates
+    const ICONS = {
+      sparkles: `<svg class="lucide" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>`,
+      terminal: `<svg class="lucide" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>`,
+      file: `<svg class="lucide" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>`,
+      check: `<svg class="lucide check-icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>`,
+      loader: `<svg class="lucide spin" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`
+    };
+
+    function getToolIcon(toolText) {
+      if (toolText.startsWith('run_command')) return ICONS.terminal;
+      if (toolText.includes('file')) return ICONS.file;
+      return ICONS.terminal;
+    }
 
     function resolveEndpoint() {
       if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) {
@@ -346,7 +465,6 @@
       return TAILSCALE_HTTPS;
     }
 
-    // If accessed via Vercel HTTPS, auto-switch to iMac Tailscale server if Tailscale HTTPS is not active
     (async function autoConnectTailscale() {
       if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) return;
       try {
@@ -355,7 +473,6 @@
         const r = await fetch(TAILSCALE_HTTPS + '/ping', { signal: ctrl.signal });
         if (r.ok) return;
       } catch (_) {
-        // Handoff to direct Tailscale IP
         window.location.replace(TAILSCALE_HTTP + '/');
       }
     })();
@@ -381,7 +498,12 @@
     }
 
     function resetSession() {
-      feed.innerHTML = `<div class="empty-state" id="empty-state">iMac에 무엇이든 물어보거나 지시하세요.</div>`;
+      feed.innerHTML = `
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon-box">${ICONS.sparkles}</div>
+          <div class="empty-text">iMac에 무엇이든 물어보거나 지시하세요.</div>
+        </div>
+      `;
     }
 
     function handleSubmit(e) {
@@ -435,7 +557,7 @@
       agentTurn.className = 'turn-agent';
       agentTurn.innerHTML = `
         <div class="thinking-row">
-          <span class="pulse-dot"></span>
+          ${ICONS.loader}
           <span>iMac 작업 중…</span>
         </div>
       `;
@@ -459,10 +581,16 @@
         } else if (data.output) {
           const parsed = parseAgentOutput(data.output);
           const toolsHtml = parsed.tools.length
-            ? `<div class="tool-steps">${parsed.tools.map(t => `<div class="tool-pill"><span class="tool-pill-icon">⚙</span><span>${esc(t)}</span></div>`).join('')}</div>`
+            ? `<div class="tool-steps">${parsed.tools.map(t => `
+                <div class="tool-pill">
+                  ${getToolIcon(t)}
+                  <span class="tool-pill-text">${esc(t)}</span>
+                  ${ICONS.check}
+                </div>
+              `).join('')}</div>`
             : '';
           agentTurn.innerHTML = `
-            <div class="agent-header"><strong>iMac</strong><span>${esc(parsed.elapsed || '')}</span></div>
+            <div class="agent-header">${ICONS.sparkles}<strong>iMac</strong><span>${esc(parsed.elapsed || '')}</span></div>
             ${toolsHtml}
             <div class="agent-body">${esc(parsed.body)}</div>
           `;

@@ -29,13 +29,25 @@
       line-height: 1.25;
       color: var(--text);
     }
+    .lucide-inline {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      stroke-width: 1.85;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      display: inline-block;
+      vertical-align: -1.5px;
+    }
     .secret-trigger {
-      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
       color: var(--text-dim);
       text-decoration: none;
       vertical-align: middle;
       opacity: 0.35;
-      margin-left: 4px;
+      margin-left: 5px;
       transition: opacity 0.2s, color 0.2s;
     }
     .secret-trigger:hover {
@@ -119,7 +131,7 @@
 <body>
   <div class="container">
     <div class="intro">
-      <h1 class="name">Wooyoung Oh <a href="/terminal/" class="secret-trigger" aria-label="Terminal">✦</a></h1>
+      <h1 class="name">Wooyoung Oh <a href="/terminal/" class="secret-trigger" aria-label="Remote Control"><svg class="lucide-inline" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></a></h1>
       <div class="tagline">Crafting interfaces. Building polished software and web experiences.</div>
       <p class="bio">
         정제된 인터페이스와 완성도 높은 프로덕트를 만듭니다. 아키텍처 설계부터 릴리즈까지 제품의 본질적인 가치를 실현하며, 지식의 나눔과 건강한 팀 시너지를 지향합니다.
@@ -139,7 +151,7 @@
 
         <div class="item">
           <div class="row">
-            <a href="https://illuminarean.com/" target="_blank" rel="noopener" class="title" style="text-decoration:none;color:inherit;">Illuminarean ↗</a>
+            <a href="https://illuminarean.com/" target="_blank" rel="noopener" class="title" style="text-decoration:none;color:inherit;">Illuminarean <svg class="lucide-inline" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
             <span class="meta">2023 — 2024</span>
           </div>
           <div class="desc">엔터테인먼트 정산 및 에너지 투자 플랫폼 개발, Webpack 커스텀 이미지 로더 제작.</div>
@@ -168,7 +180,7 @@
         <a class="row" href="/notes/#post-1"><span class="title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</span><span class="meta">2026. 11. 08</span></a>
         <a class="row" href="/notes/#post-2"><span class="title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</span><span class="meta">2026. 11. 07</span></a>
         <a class="row" href="/notes/#post-3"><span class="title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</span><span class="meta">2026. 11. 05</span></a>
-        <a class="more-link" href="/notes/">All notes →</a>
+        <a class="more-link" href="/notes/">All notes <svg class="lucide-inline" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       </div>
     </div>
 
