@@ -109,34 +109,72 @@
       color: #fff;
     }
 
-    /* Minimal Text Switcher */
-    .view-switcher {
-      display: flex;
-      gap: 20px;
-    }
-    .switch-btn {
+    /* Hamburger Menu */
+    .menu-wrap { position: relative; }
+    .menu-btn {
+      width: 36px;
+      height: 36px;
       background: transparent;
       border: none;
-      border-bottom: 1.5px solid transparent;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 500;
-      padding: 4px 0;
-      color: var(--text-dim);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
       cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
     }
-    .switch-btn:hover { color: var(--text-muted); }
-    .switch-btn.active {
-      color: var(--text);
-      border-bottom-color: var(--text);
+    .menu-btn span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
     }
-    body.terminal-active .switch-btn { color: var(--term-dim); }
-    body.terminal-active .switch-btn:hover { color: var(--term-text); }
-    body.terminal-active .switch-btn.active {
-      color: #fff;
-      border-bottom-color: #fff;
+    body.terminal-active .menu-btn span { background: #fff; }
+    .menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .menu-panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 44px;
+      min-width: 150px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      padding: 6px;
+      z-index: 50;
     }
+    .menu-panel.open { display: block; animation: fadeIn 0.15s ease-out; }
+    body.terminal-active .menu-panel {
+      background: var(--term-card);
+      border-color: var(--term-border);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+    .menu-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .menu-item:hover { background: var(--border-subtle); color: var(--text); }
+    .menu-item.active { color: var(--text); font-weight: 600; }
+    body.terminal-active .menu-item { color: var(--term-dim); }
+    body.terminal-active .menu-item:hover { background: #21262d; color: #fff; }
+    body.terminal-active .menu-item.active { color: #fff; }
 
     /* View: Notes / Blog */
     #view-notes {
@@ -389,9 +427,14 @@
         <a href="javascript:void(0)" onclick="switchView('notes')" class="site-title">wooyoung.me</a>
       </div>
       
-      <div class="view-switcher">
-        <button class="switch-btn active" id="btn-notes" onclick="switchView('notes')">Notes</button>
-        <button class="switch-btn" id="btn-terminal" onclick="switchView('terminal')">Terminal</button>
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menu-btn" aria-label="메뉴" onclick="toggleMenu(event)">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="menu-panel" id="menu-panel">
+          <button class="menu-item active" id="btn-notes" onclick="switchView('notes')">Notes</button>
+          <button class="menu-item" id="btn-terminal" onclick="switchView('terminal')">Terminal</button>
+        </div>
       </div>
     </header>
 
@@ -514,8 +557,21 @@
   </div>
 
   <script>
+    // Hamburger Menu
+    function toggleMenu(e) {
+      if (e) e.stopPropagation();
+      const open = !document.getElementById('menu-panel').classList.contains('open');
+      setMenu(open);
+    }
+    function setMenu(open) {
+      document.getElementById('menu-panel').classList.toggle('open', open);
+      document.getElementById('menu-btn').classList.toggle('open', open);
+    }
+    document.addEventListener('click', () => setMenu(false));
+
     // View Switcher
     function switchView(viewName) {
+      setMenu(false);
       const isTerm = (viewName === 'terminal');
       document.body.classList.toggle('terminal-active', isTerm);
       document.getElementById('view-notes').style.display = isTerm ? 'none' : 'block';
