@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Remote Control</title>
+  <title>wooyoung.me</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#fafafa">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Remote">
+  <meta name="apple-mobile-web-app-title" content="wooyoung.me">
   <link rel="apple-touch-icon" href="/icon-192.png">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -372,8 +372,15 @@
     const feed = document.getElementById('feed');
     const promptInput = document.getElementById('prompt-input');
 
-    const TAILSCALE_HTTPS = 'https://apple-imac.tailffd5d4.ts.net';
-    const TAILSCALE_HTTP = 'http://100.119.171.74:8888';
+    const CLOUDFLARE_TUNNEL = 'https://favourite-lenders-camcorders-hobbies.trycloudflare.com';
+    const TUNNEL_TOKEN = 'ca6b2d6f697b550b4df8b327ff2766d9';
+
+    function getBaseUrl() {
+      if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) {
+        return '';
+      }
+      return CLOUDFLARE_TUNNEL;
+    }
 
     // Lucide inline SVG templates
     const ICONS = {
@@ -389,25 +396,6 @@
       if (toolText.includes('file')) return ICONS.file;
       return ICONS.terminal;
     }
-
-    function resolveEndpoint() {
-      if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) {
-        return '';
-      }
-      return TAILSCALE_HTTPS;
-    }
-
-    (async function autoConnectTailscale() {
-      if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) return;
-      try {
-        const ctrl = new AbortController();
-        setTimeout(() => ctrl.abort(), 1200);
-        const r = await fetch(TAILSCALE_HTTPS + '/ping', { signal: ctrl.signal });
-        if (r.ok) return;
-      } catch (_) {
-        window.location.replace(TAILSCALE_HTTP + '/');
-      }
-    })();
 
     promptInput.addEventListener('input', () => {
       promptInput.style.height = 'auto';
@@ -497,12 +485,15 @@
       scrollToBottom();
 
       const finalCmd = `agent "${text.replace(/"/g, '\\"')}"`;
-      const base = resolveEndpoint();
+      const base = getBaseUrl();
 
       try {
         const res = await fetch(base + '/api/exec', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Auth-Token': TUNNEL_TOKEN
+          },
           body: JSON.stringify({ command: finalCmd })
         });
         const data = await res.json();
