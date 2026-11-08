@@ -86,24 +86,20 @@
       padding: 5px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: border-color 0.15s;
-    }
-    .node-pill:hover {
-      border-color: var(--text-dim);
     }
     .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--text-dim);
-    }
-    .node-pill.ready .status-dot {
       background: var(--green);
       box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+    }
+    .node-pill.offline .status-dot {
+      background: var(--text-dim);
+      box-shadow: none;
     }
     .icon-btn {
       width: 30px;
@@ -121,68 +117,6 @@
     .icon-btn:hover {
       background: var(--surface-subtle);
       color: var(--text);
-    }
-
-    /* Connection Settings Drawer */
-    .settings-drawer {
-      display: none;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 18px;
-      flex-direction: column;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .settings-drawer.open {
-      display: flex;
-    }
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .field-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-dim);
-    }
-    .field-input {
-      width: 100%;
-      padding: 8px 11px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      outline: none;
-    }
-    .field-input:focus {
-      border-color: var(--text);
-      background: var(--surface);
-    }
-    .drawer-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 2px;
-    }
-    .btn-sm {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 6px 12px;
-      border-radius: 7px;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-    }
-    .btn-sm.primary {
-      background: var(--text);
-      border-color: var(--text);
-      color: #fff;
     }
 
     /* Main Feed */
@@ -373,29 +307,13 @@
     <header class="topbar">
       <span class="app-title">Remote Control</span>
       <div class="topbar-right">
-        <button type="button" class="node-pill" id="node-pill" onclick="toggleSettings()">
+        <div class="node-pill" id="node-pill">
           <span class="status-dot"></span>
-          <span id="node-label">Setup</span>
-        </button>
+          <span id="node-label">iMac</span>
+        </div>
         <button type="button" class="icon-btn" onclick="resetSession()" title="Clear" aria-label="Clear">↺</button>
       </div>
     </header>
-
-    <!-- Inline Settings Drawer -->
-    <div class="settings-drawer" id="settings-drawer">
-      <div class="field-group">
-        <label class="field-label" for="cfg-api">iMac Endpoint URL</label>
-        <input class="field-input" id="cfg-api" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" spellcheck="false" />
-      </div>
-      <div class="field-group">
-        <label class="field-label" for="cfg-token">Access Token</label>
-        <input class="field-input" id="cfg-token" type="password" placeholder="Token" autocomplete="off" spellcheck="false" />
-      </div>
-      <div class="drawer-actions">
-        <button type="button" class="btn-sm" onclick="toggleSettings(false)">Cancel</button>
-        <button type="button" class="btn-sm primary" onclick="saveSettings()">Save</button>
-      </div>
-    </div>
 
     <!-- Conversation Stream -->
     <main id="feed">
@@ -416,50 +334,31 @@
     const feed = document.getElementById('feed');
     const promptInput = document.getElementById('prompt-input');
     const nodePill = document.getElementById('node-pill');
-    const nodeLabel = document.getElementById('node-label');
-    const settingsDrawer = document.getElementById('settings-drawer');
-    const cfgApi = document.getElementById('cfg-api');
-    const cfgToken = document.getElementById('cfg-token');
 
-    const getApi = () => localStorage.getItem('imac_api_endpoint') || '';
-    const getToken = () => localStorage.getItem('imac_token') || '';
+    // Direct Tailscale endpoints (only reachable when Tailscale VPN is active on this device)
+    const TAILSCALE_HTTPS = 'https://apple-imac.tailffd5d4.ts.net';
+    const TAILSCALE_HTTP = 'http://100.119.171.74:8888';
 
-    // Auto-configure via URL hash: /terminal/#api=https://xxxx.trycloudflare.com&token=XXXX
-    (function initSetup() {
-      const h = new URLSearchParams(location.hash.slice(1));
-      if (h.get('api')) localStorage.setItem('imac_api_endpoint', h.get('api').replace(/\/$/, ''));
-      if (h.get('token')) localStorage.setItem('imac_token', h.get('token'));
-      if (h.get('api') || h.get('token')) history.replaceState('', document.title, location.pathname);
-      updateStatusUI();
-    })();
-
-    function updateStatusUI() {
-      const ok = Boolean(getApi());
-      nodePill.classList.toggle('ready', ok);
-      nodeLabel.textContent = ok ? 'iMac' : 'Setup';
-    }
-
-    function toggleSettings(force) {
-      const next = typeof force === 'boolean' ? force : !settingsDrawer.classList.contains('open');
-      if (next) {
-        cfgApi.value = getApi();
-        cfgToken.value = getToken();
+    function resolveEndpoint() {
+      if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) {
+        return '';
       }
-      settingsDrawer.classList.toggle('open', next);
+      return TAILSCALE_HTTPS;
     }
 
-    function saveSettings() {
-      const apiVal = cfgApi.value.trim().replace(/\/$/, '');
-      const tokenVal = cfgToken.value.trim();
-      if (apiVal) localStorage.setItem('imac_api_endpoint', apiVal);
-      else localStorage.removeItem('imac_api_endpoint');
-
-      if (tokenVal) localStorage.setItem('imac_token', tokenVal);
-      else localStorage.removeItem('imac_token');
-
-      updateStatusUI();
-      toggleSettings(false);
-    }
+    // If accessed via Vercel HTTPS, auto-switch to iMac Tailscale server if Tailscale HTTPS is not active
+    (async function autoConnectTailscale() {
+      if (location.hostname === '100.119.171.74' || location.hostname.endsWith('.ts.net')) return;
+      try {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 1200);
+        const r = await fetch(TAILSCALE_HTTPS + '/ping', { signal: ctrl.signal });
+        if (r.ok) return;
+      } catch (_) {
+        // Handoff to direct Tailscale IP
+        window.location.replace(TAILSCALE_HTTP + '/');
+      }
+    })();
 
     promptInput.addEventListener('input', () => {
       promptInput.style.height = 'auto';
@@ -532,16 +431,6 @@
       userEl.textContent = text;
       feed.appendChild(userEl);
 
-      if (!getApi()) {
-        toggleSettings(true);
-        const errTurn = document.createElement('div');
-        errTurn.className = 'turn-agent';
-        errTurn.innerHTML = `<div class="agent-body error">연결 정보가 없습니다. 상단 설정 창에 iMac Endpoint URL과 Token을 저장하세요.</div>`;
-        feed.appendChild(errTurn);
-        scrollToBottom();
-        return;
-      }
-
       const agentTurn = document.createElement('div');
       agentTurn.className = 'turn-agent';
       agentTurn.innerHTML = `
@@ -554,18 +443,18 @@
       scrollToBottom();
 
       const finalCmd = `agent "${text.replace(/"/g, '\\"')}"`;
+      const base = resolveEndpoint();
 
       try {
-        const res = await fetch(getApi() + '/api/exec', {
+        const res = await fetch(base + '/api/exec', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': getToken() },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ command: finalCmd })
         });
         const data = await res.json();
+        nodePill.classList.remove('offline');
 
-        if (res.status === 401) {
-          agentTurn.innerHTML = `<div class="agent-body error">인증 실패: 우측 상단 [iMac] 버튼을 눌러 올바른 Token을 입력하세요.</div>`;
-        } else if (data.error) {
+        if (data.error) {
           agentTurn.innerHTML = `<div class="agent-body error">${esc(data.error.trim())}</div>`;
         } else if (data.output) {
           const parsed = parseAgentOutput(data.output);
@@ -581,7 +470,8 @@
           agentTurn.innerHTML = `<div class="agent-body">완료되었습니다.</div>`;
         }
       } catch (err) {
-        agentTurn.innerHTML = `<div class="agent-body error">연결 실패 (${esc(err.message)}). 상단 [iMac] 설정에서 주소를 확인하세요.</div>`;
+        nodePill.classList.add('offline');
+        agentTurn.innerHTML = `<div class="agent-body error">Tailscale 연결을 확인해 주세요. (Tailscale 앱이 켜져 있어야 iMac과 통신됩니다.)</div>`;
       }
       scrollToBottom();
     }
