@@ -1,10 +1,11 @@
 {
-  "name": "wooyoung.me — Notes & Thoughts",
-  "short_name": "wooyoung.me",
-  "description": "wooyoung.me 생각과 기술을 기록하는 개인 일기장",
-  "start_url": "/",
+  "name": "Terminal — wooyoung.me",
+  "short_name": "Terminal",
+  "description": "iMac Remote CLI Terminal",
+  "start_url": "/terminal/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#111827",
+  "background_color": "#fafafa",
   "theme_color": "#fafafa",
   "orientation": "portrait-primary",
   "icons": [
