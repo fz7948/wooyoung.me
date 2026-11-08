@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>우영의 일기장 — Wooyoung's Log</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#fafafa">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="우영의 일기">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-subtle: #f3f4f6;
+      --text: #111827;
+      --text-muted: #4b5563;
+      --text-dim: #9ca3af;
+      --accent: #2563eb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.8;
+      padding: 50px 20px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* Minimal Header */
+    header {
+      margin-bottom: 44px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+    }
+    .site-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .site-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Journal List */
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .log-item {
+      cursor: pointer;
+      padding: 22px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .log-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+    }
+    .log-item.active {
+      border-color: #94a3b8;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+    .log-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .log-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      margin-bottom: 8px;
+    }
+    .log-preview {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Expanded Article Reader (Inline) */
+    .log-content {
+      display: none;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.95rem;
+      color: #374151;
+      line-height: 1.85;
+    }
+    .log-item.active .log-content {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .log-content p {
+      margin-bottom: 14px;
+    }
+    .log-content code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .log-content blockquote {
+      border-left: 3px solid #3b82f6;
+      padding: 8px 0 8px 16px;
+      background: #f8fafc;
+      border-radius: 0 8px 8px 0;
+      color: #1e293b;
+      font-size: 0.93rem;
+      margin: 18px 0;
+    }
+
+    /* Minimal Footer */
+    footer {
+      margin-top: 70px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .footer-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand-wrap">
+        <img src="/favicon.svg" alt="logo" class="brand-logo">
+        <a href="#" class="site-title">우영의 일기장</a>
+      </div>
+      <span class="site-desc">notes & thoughts</span>
+    </header>
+
+    <!-- Post list -->
+    <main class="log-list">
+
+      <!-- Entry 1 -->
+      <article class="log-item active" onclick="toggleLog(this)">
+        <div class="log-date">2026. 11. 08 (일)</div>
+        <h2 class="log-title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</h2>
+        <p class="log-preview">
+          방구석에 오래 잠들어 있던 2015 아이맥 27인치를 다시 살려냈다. 8GB였던 램을 24GB로 올리고, 상시 가동되는 AI 서버로 세팅했다.
+        </p>
+        <div class="log-content">
+          <p>
+            M2 Pro 맥북 16인치가 주력이지만, 무거운 AI 작업이나 백그라운드 프로세스까지 맥북 한 대에 다 몰아넣는 건 왠지 아쉬웠다. 구형 아이맥 27인치 5K는 화면도 넓고 램 슬롯도 4개나 있어서 자율 AI 서버로 쓰기에 아주 알맞았다.
+          </p>
+          <p>
+            DDR3L 1866MHz 8GB 램 2개를 추가해 총 24GB를 만들고, Tailscale로 맥북과 아이맥을 묶었다. 스마트폰에서 SSH를 쓸 때 한글이 깨지는 문제가 거슬려서 모바일 웹 터미널을 직접 하나 짰다.
+          </p>
+          <blockquote>
+            "침대에 누워서 갤럭시 폰으로 'agent 이거 만들어줘'라고 한글로 치면, 서재의 아이맥이 알아서 코드를 짜고 바탕화면에 파일을 저장한다."
+          </blockquote>
+          <p>
+            거창한 클라우드 결제 없이도 집에 있는 하드웨어끼리 연결해서 나만의 시스템을 만들어가는 과정이 꽤나 재미있다.
+          </p>
+        </div>
+      </article>
+
+      <!-- Entry 2 -->
+      <article class="log-item" onclick="toggleLog(this)">
+        <div class="log-date">2026. 11. 07 (토)</div>
+        <h2 class="log-title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</h2>
+        <p class="log-preview">
+          처음에는 웹사이트에 멋진 슬로건도 넣고 회사 포트폴리오처럼 꾸며볼까 고민했다. 하지만 아직 구체적인 사업 방향이 정해지지도 않았는데 껍데기부터 만드는 건 맞지 않았다.
+        </p>
+        <div class="log-content">
+          <p>
+            남들에게 보여주기 위한 화려한 랜딩페이지보다는, 내가 매일 부딪히고 만들어낸 결과들을 일기처럼 솔직하게 쌓아가는 도화지 같은 공간이 훨씬 자연스럽다.
+          </p>
+          <p>
+            글이 10개, 50개 쌓이다 보면 내가 진짜 무엇을 좋아하고 어떤 가치를 만들어낼 수 있는지 자연스럽게 방향이 보일 것이다. 군더더기를 다 덜어내고 글씨와 생각에만 집중할 수 있는 이 형식이 마음에 든다.
+          </p>
+        </div>
+      </article>
+
+      <!-- Entry 3 -->
+      <article class="log-item" onclick="toggleLog(this)">
+        <div class="log-date">2026. 11. 05 (목)</div>
+        <h2 class="log-title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</h2>
+        <p class="log-preview">
+          AI 도구가 쏟아지는 시대지만, 결국 가장 중요한 건 '내가 무엇을 하고 싶은가'라는 주도권이다.
+        </p>
+        <div class="log-content">
+          <p>
+            새로운 기술이 나올 때마다 허겁지겁 따라가는 것보다, 내 일상과 개발 환경에 딱 필요한 만큼만 실용적으로 녹여내는 훈련을 하고 있다.
+          </p>
+          <p>
+            혼자서도 도구들을 레버리지해서 더 밀도 있게 일하는 법을 계속 실험해볼 생각이다.
+          </p>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <span>© 2026 wooyoung</span>
+      <a href="mailto:fz7948@gmail.com" class="footer-link">email</a>
+    </footer>
+  </div>
+
+  <script>
+    function toggleLog(element) {
+      const wasActive = element.classList.contains('active');
+      document.querySelectorAll('.log-item').forEach(el => {
+        el.classList.remove('active');
+      });
+      if (!wasActive) {
+        element.classList.add('active');
+      }
+    }
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
