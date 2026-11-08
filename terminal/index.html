@@ -2,154 +2,358 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Terminal — wooyoung.me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Terminal</title>
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#fafafa">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="wooyoung.me">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="apple-mobile-web-app-title" content="Terminal">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
-    header {
-      margin-bottom: 20px;
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .term-shell {
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      padding: 16px;
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      flex-direction: column;
     }
-    .nav-back {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: var(--term-dim);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-back:hover {
-      color: var(--term-text);
+    @media (max-width: 600px) {
+      .term-shell {
+        padding: 0;
+      }
+      #view-terminal {
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+        box-shadow: none !important;
+      }
     }
     #view-terminal {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: var(--term-bg);
-      border: 1px solid var(--term-border);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      position: relative;
     }
+
+    /* Top Bar */
     .term-bar {
-      background: var(--term-card);
-      border-bottom: 1px solid var(--term-border);
-      padding: 10px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
     }
-    .term-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--term-dim); font-weight: 600; }
-    .node-status {
+    .term-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .term-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .term-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .term-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--border-subtle);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .status-btn:hover {
+      border-color: var(--text-dim);
+      color: var(--text);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9ca3af;
+    }
+    .status-btn.ready .status-dot {
+      background: #10b981;
+    }
+
+    /* Settings Drawer */
+    .settings-panel {
+      display: none;
+      background: #f9fafb;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .settings-panel.open {
+      display: flex;
+    }
+    .field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
-      background: rgba(63, 185, 80, 0.15);
-      color: var(--term-green);
-      padding: 2px 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(63, 185, 80, 0.3);
-      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
     }
+    .field-input {
+      width: 100%;
+      padding: 8px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+    }
+    .field-input:focus {
+      border-color: var(--text);
+    }
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .btn-sm {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+    .btn-sm.primary {
+      background: var(--text);
+      border-color: var(--text);
+      color: #fff;
+    }
+
+    /* Terminal Output Screen */
     #terminal-screen {
       flex: 1;
-      min-height: 280px;
-      max-height: calc(100vh - 260px);
       overflow-y: auto;
-      padding: 14px;
+      padding: 16px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--term-text);
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: var(--text);
       word-break: break-word;
       white-space: pre-wrap;
+      -webkit-overflow-scrolling: touch;
     }
-    .accessory-bar {
-      background: var(--term-card);
-      border-top: 1px solid var(--term-border);
-      padding: 8px;
+    .log-entry {
+      margin-bottom: 14px;
+    }
+    .log-cmd {
       display: flex;
-      gap: 8px;
+      align-items: baseline;
+      gap: 6px;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .log-cmd .prompt-sign {
+      color: var(--text-dim);
+      font-weight: 400;
+      user-select: none;
+    }
+    .log-out {
+      color: var(--text-muted);
+      padding-left: 14px;
+      border-left: 1.5px solid var(--border);
+    }
+    .log-err {
+      color: #dc2626;
+      padding-left: 14px;
+      border-left: 1.5px solid #fca5a5;
+    }
+    .log-muted {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    /* Quick Action Bar */
+    .accessory-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 8px 12px;
+      display: flex;
+      gap: 6px;
       overflow-x: auto;
       scrollbar-width: none;
+      flex-shrink: 0;
     }
     .accessory-bar::-webkit-scrollbar { display: none; }
     .tool-chip {
-      background: #21262d;
-      border: 1px solid var(--term-border);
-      color: #c9d1d9;
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      padding: 5px 11px;
+      border-radius: 7px;
       white-space: nowrap;
       cursor: pointer;
       font-family: 'JetBrains Mono', monospace;
       touch-action: manipulation;
+      transition: all 0.12s;
     }
-    .tool-chip:active { background: #30363d; color: #fff; transform: scale(0.96); }
-    .tool-chip.accent { background: rgba(88, 166, 255, 0.18); border-color: rgba(88, 166, 255, 0.5); color: #79b8ff; font-weight: bold; }
+    .tool-chip:hover {
+      border-color: var(--text-dim);
+      color: var(--text);
+    }
+    .tool-chip:active {
+      background: var(--border-subtle);
+      transform: scale(0.97);
+    }
+    .tool-chip.accent {
+      background: var(--text);
+      border-color: var(--text);
+      color: #ffffff;
+      font-weight: 500;
+    }
+    .tool-chip.accent:hover {
+      opacity: 0.9;
+      color: #ffffff;
+    }
+
+    /* Input Line */
     .term-input-line {
-      background: #090d13;
-      border-top: 1px solid var(--term-border);
-      padding: 8px 12px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
     }
-    .cli-prefix { color: var(--term-green); font-size: 13px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
+    .cli-prefix {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+      user-select: none;
+    }
     #cmd-input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
-      color: #fff;
+      color: var(--text);
       font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
-      caret-color: var(--term-green);
+      caret-color: var(--text);
       padding: 4px 0;
     }
+    #cmd-input::placeholder {
+      color: #d1d5db;
+    }
     .send-icon-btn {
-      background: #238636;
+      background: var(--text);
       border: none;
-      color: #fff;
-      width: 34px;
-      height: 34px;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       cursor: pointer;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s, transform 0.1s;
     }
-    .send-icon-btn:active { background: #2ea043; transform: scale(0.95); }
+    .send-icon-btn:hover { opacity: 0.88; }
+    .send-icon-btn:active { transform: scale(0.95); }
   </style>
 </head>
-<body class="dark">
-  <div class="container">
-    <header>
-      <a href="/" class="nav-back">← Wooyoung</a>
-    </header>
-
+<body>
+  <div class="term-shell">
     <div id="view-terminal">
+      <!-- Top Bar -->
       <div class="term-bar">
-        <div class="term-title">apple@imac-24gb: ~ (zsh)</div>
-        <div class="node-status" id="node-status" onclick="configure()">● iMac</div>
+        <div class="term-bar-left">
+          <span class="term-title">imac</span>
+          <span class="term-sub">~ zsh</span>
+        </div>
+        <div class="term-bar-right">
+          <button type="button" class="status-btn" id="status-btn" onclick="toggleSettings()">
+            <span class="status-dot"></span>
+            <span id="status-text">Setup</span>
+          </button>
+        </div>
       </div>
 
+      <!-- Inline Settings Drawer -->
+      <div class="settings-panel" id="settings-panel">
+        <div class="field-row">
+          <label class="field-label" for="cfg-api">Endpoint URL</label>
+          <input class="field-input" id="cfg-api" type="url" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="field-row">
+          <label class="field-label" for="cfg-token">Access Token</label>
+          <input class="field-input" id="cfg-token" type="password" placeholder="Token" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="settings-actions">
+          <button type="button" class="btn-sm" onclick="toggleSettings(false)">Cancel</button>
+          <button type="button" class="btn-sm primary" onclick="saveSettings()">Save</button>
+        </div>
+      </div>
+
+      <!-- Terminal Output -->
       <div id="terminal-screen">
-        <div style="color:#8b949e;">iMac 27" 5K (24GB) — Antigravity agent ready.</div>
-        <div style="color:#8b949e;">[agent]를 눌러 한글로 작업을 지시하세요.</div>
-        <br>
+        <div class="log-entry log-muted">iMac 24GB node ready.</div>
       </div>
 
+      <!-- Quick Chips -->
       <div class="accessory-bar">
         <button type="button" class="tool-chip accent" onclick="fillAgent(event)">agent</button>
         <button type="button" class="tool-chip" onclick="quickRun('status')">status</button>
@@ -160,89 +364,168 @@
         <button type="button" class="tool-chip" onclick="clearScreen()">clear</button>
       </div>
 
+      <!-- Command Input -->
       <form class="term-input-line" onsubmit="handleCommand(event)">
         <span class="cli-prefix">%</span>
-        <input id="cmd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="agent &quot;작업 내용&quot;" />
-        <button type="submit" class="send-icon-btn">↵</button>
+        <input id="cmd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="agent &quot;작업 내용&quot; 또는 명령어" />
+        <button type="submit" class="send-icon-btn" aria-label="Run">↵</button>
       </form>
     </div>
-
-    <footer>
-      <div class="footer-label">Connect</div>
-      <p class="footer-text">
-        Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>, 
-        <a href="https://github.com/fz7948" target="_blank" rel="noopener" class="footer-link">GitHub</a>, or 
-        <a href="https://fz7948.tistory.com" target="_blank" rel="noopener" class="footer-link">Blog</a>.
-      </p>
-    </footer>
   </div>
+
   <script src="/site.js"></script>
   <script>
     const screen = document.getElementById('terminal-screen');
     const input = document.getElementById('cmd-input');
+    const statusBtn = document.getElementById('status-btn');
+    const statusText = document.getElementById('status-text');
+    const settingsPanel = document.getElementById('settings-panel');
+    const cfgApi = document.getElementById('cfg-api');
+    const cfgToken = document.getElementById('cfg-token');
 
-    // Connection settings live only in this device's localStorage (never in the repo).
-    // First-time setup link:  /terminal/#api=https://xxxx.trycloudflare.com&token=XXXX
-    (function readSetup() {
-      const h = new URLSearchParams(location.hash.slice(1));
-      if (h.get('api')) localStorage.setItem('imac_api_endpoint', h.get('api').replace(/\/$/, ''));
-      if (h.get('token')) localStorage.setItem('imac_token', h.get('token'));
-      if (h.get('api') || h.get('token')) history.replaceState('', document.title, location.pathname);
-    })();
+    const cmdHistory = [];
+    let historyIdx = -1;
 
     const getApi = () => localStorage.getItem('imac_api_endpoint') || '';
     const getToken = () => localStorage.getItem('imac_token') || '';
 
-    function configure() {
-      const api = prompt('iMac endpoint URL:', getApi());
-      if (api === null) return;
-      const token = prompt('Access token:', getToken());
-      if (api.trim()) localStorage.setItem('imac_api_endpoint', api.trim().replace(/\/$/, ''));
-      if (token !== null && token.trim()) localStorage.setItem('imac_token', token.trim());
+    // Auto-read from URL hash: /terminal/#api=https://xxxx.trycloudflare.com&token=XXXX
+    (function initSetup() {
+      const h = new URLSearchParams(location.hash.slice(1));
+      if (h.get('api')) localStorage.setItem('imac_api_endpoint', h.get('api').replace(/\/$/, ''));
+      if (h.get('token')) localStorage.setItem('imac_token', h.get('token'));
+      if (h.get('api') || h.get('token')) history.replaceState('', document.title, location.pathname);
+      updateStatusUI();
+    })();
+
+    function updateStatusUI() {
+      const hasConfig = Boolean(getApi());
+      statusBtn.classList.toggle('ready', hasConfig);
+      statusText.textContent = hasConfig ? 'iMac' : 'Setup';
     }
 
-    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-    function scrollToBottom() { screen.scrollTop = screen.scrollHeight; }
-    function appendLine(html) {
+    function toggleSettings(force) {
+      const next = typeof force === 'boolean' ? force : !settingsPanel.classList.contains('open');
+      if (next) {
+        cfgApi.value = getApi();
+        cfgToken.value = getToken();
+      }
+      settingsPanel.classList.toggle('open', next);
+    }
+
+    function saveSettings() {
+      const apiVal = cfgApi.value.trim().replace(/\/$/, '');
+      const tokenVal = cfgToken.value.trim();
+      if (apiVal) localStorage.setItem('imac_api_endpoint', apiVal);
+      else localStorage.removeItem('imac_api_endpoint');
+
+      if (tokenVal) localStorage.setItem('imac_token', tokenVal);
+      else localStorage.removeItem('imac_token');
+
+      updateStatusUI();
+      toggleSettings(false);
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function scrollToBottom() {
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    function appendEntry(html) {
       const d = document.createElement('div');
+      d.className = 'log-entry';
       d.innerHTML = html;
       screen.appendChild(d);
       scrollToBottom();
+      return d;
     }
-    function clearScreen() { screen.innerHTML = "<div style='color:#8b949e;'>cleared.</div><br>"; }
+
+    function clearScreen() {
+      screen.innerHTML = '';
+    }
 
     function fillAgent(e) {
       if (e) e.preventDefault();
       input.value = 'agent ""';
       input.focus();
-      setTimeout(() => { input.focus(); try { input.setSelectionRange(7, 7); } catch (err) {} }, 50);
+      setTimeout(() => {
+        input.focus();
+        try { input.setSelectionRange(7, 7); } catch (_) {}
+      }, 40);
     }
+
     function fillSay(e) {
       if (e) e.preventDefault();
       input.value = 'say ""';
       input.focus();
-      setTimeout(() => { input.focus(); try { input.setSelectionRange(5, 5); } catch (err) {} }, 50);
+      setTimeout(() => {
+        input.focus();
+        try { input.setSelectionRange(5, 5); } catch (_) {}
+      }, 40);
     }
-    function quickRun(cmd) { input.value = cmd; executeCommand(cmd); }
+
+    function quickRun(cmd) {
+      input.value = '';
+      executeCommand(cmd);
+    }
+
     function handleCommand(e) {
       e.preventDefault();
       const cmd = input.value;
-      if (cmd.trim()) executeCommand(cmd);
+      if (cmd.trim()) {
+        input.value = '';
+        executeCommand(cmd);
+      }
     }
 
-    async function executeCommand(cmd) {
-      input.value = '';
-      appendLine(`<span style="color:#3fb950;font-weight:bold;">apple@imac-24gb</span> <span style="color:#58a6ff;">~</span> <span style="color:#8b949e;">%</span> <span style="color:#fff;font-weight:bold;">${esc(cmd)}</span>`);
-      if (cmd.trim() === 'clear') { clearScreen(); return; }
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') {
+        if (cmdHistory.length > 0 && historyIdx < cmdHistory.length - 1) {
+          e.preventDefault();
+          historyIdx++;
+          input.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
+        }
+      } else if (e.key === 'ArrowDown') {
+        if (historyIdx > 0) {
+          e.preventDefault();
+          historyIdx--;
+          input.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
+        } else if (historyIdx === 0) {
+          e.preventDefault();
+          historyIdx = -1;
+          input.value = '';
+        }
+      }
+    });
 
-      if (!getApi()) {
-        appendLine(`<span style="color:#d29922;">아직 연결 설정이 없습니다. 우측 상단 [● iMac]을 눌러 endpoint와 token을 입력하세요.</span><br>`);
+    async function executeCommand(cmd) {
+      const trimmed = cmd.trim();
+      if (trimmed === 'clear') {
+        clearScreen();
         return;
       }
 
-      const pid = 'pending-' + Date.now();
-      const isAgent = cmd.trim().startsWith('agent ');
-      appendLine(`<span style="color:#8b949e;" id="${pid}">${isAgent ? 'agent working…' : 'running…'}</span>`);
+      cmdHistory.push(cmd);
+      historyIdx = -1;
+
+      if (!getApi()) {
+        toggleSettings(true);
+        appendEntry(`
+          <div class="log-cmd"><span class="prompt-sign">%</span><span>${esc(cmd)}</span></div>
+          <div class="log-err">연결 정보가 없습니다. 상단 설정 창에 Endpoint URL과 Token을 저장하세요.</div>
+        `);
+        return;
+      }
+
+      const isAgent = trimmed.startsWith('agent ');
+      const entry = appendEntry(`
+        <div class="log-cmd"><span class="prompt-sign">%</span><span>${esc(cmd)}</span></div>
+        <div class="log-muted">${isAgent ? 'agent working…' : 'running…'}</div>
+      `);
+      const bodyEl = entry.lastElementChild;
 
       try {
         const res = await fetch(getApi() + '/api/exec', {
@@ -251,21 +534,25 @@
           body: JSON.stringify({ command: cmd })
         });
         const data = await res.json();
-        const p = document.getElementById(pid); if (p) p.remove();
+
         if (res.status === 401) {
-          appendLine(`<span style="color:#f85149;">인증 실패: token이 올바르지 않습니다. [● iMac]에서 다시 입력하세요.</span>`);
+          bodyEl.className = 'log-err';
+          bodyEl.textContent = '인증 실패: 우측 상단 [iMac] 버튼을 눌러 올바른 Token을 입력하세요.';
         } else if (data.output) {
-          appendLine(`<span style="color:#e6edf3;">${esc(data.output)}</span>`);
+          bodyEl.className = 'log-out';
+          bodyEl.textContent = data.output.replace(/\n$/, '');
         } else if (data.error) {
-          appendLine(`<span style="color:#f85149;">${esc(data.error)}</span>`);
+          bodyEl.className = 'log-err';
+          bodyEl.textContent = data.error.replace(/\n$/, '');
         } else {
-          appendLine(`<span style="color:#8b949e;">(no output)</span>`);
+          bodyEl.className = 'log-muted';
+          bodyEl.textContent = 'done.';
         }
       } catch (err) {
-        const p = document.getElementById(pid); if (p) p.remove();
-        appendLine(`<span style="color:#f85149;">Connection error: ${esc(err.message)}<br><small style="color:#8b949e;">iMac 터널이 꺼졌거나 주소가 바뀌었을 수 있습니다. [● iMac]에서 endpoint를 확인하세요.</small></span>`);
+        bodyEl.className = 'log-err';
+        bodyEl.textContent = `연결 실패 (${err.message}). 우측 상단 [iMac] 설정에서 주소를 확인하세요.`;
       }
-      appendLine('<br>');
+      scrollToBottom();
     }
   </script>
 </body>
