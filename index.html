@@ -190,25 +190,26 @@
       border-bottom: 1px solid var(--border);
     }
     .log-item:first-child { padding-top: 8px; }
+    /* Plus / minus toggle */
+    .log-item::before,
     .log-item::after {
       content: '';
       position: absolute;
-      right: 4px;
-      top: 38px;
-      width: 8px;
-      height: 8px;
-      border-right: 1.5px solid var(--text-dim);
-      border-bottom: 1.5px solid var(--text-dim);
-      transform: rotate(45deg);
-      transition: transform 0.25s ease, border-color 0.2s;
+      right: 2px;
+      top: 42px;
+      width: 12px;
+      height: 1.5px;
+      background: var(--text-dim);
+      border-radius: 1px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, opacity 0.2s;
     }
-    .log-item:first-child::after { top: 18px; }
-    .log-item.active::after {
-      transform: rotate(-135deg);
-      margin-top: 4px;
-      border-color: var(--text);
-    }
-    .log-item:hover::after { border-color: var(--text); }
+    .log-item:first-child::before,
+    .log-item:first-child::after { top: 22px; }
+    .log-item::after { transform: rotate(90deg); }
+    .log-item.active::after { transform: rotate(0deg); opacity: 0; }
+    .log-item.active::before,
+    .log-item:hover::before,
+    .log-item:hover::after { background: var(--text); }
 
     .log-date {
       font-family: 'JetBrains Mono', monospace;
