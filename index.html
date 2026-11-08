@@ -75,16 +75,10 @@
 
     /* Top Header & View Switcher */
     header {
-      margin-bottom: 30px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
-      gap: 12px;
-    }
-    body.terminal-active header {
-      border-bottom-color: var(--term-border);
     }
 
     .brand-wrap {
@@ -462,12 +456,8 @@
 <body>
 
   <div class="container">
-    <!-- Header with Integrated Segmented Switcher -->
+    <!-- Header -->
     <header>
-      <div class="brand-wrap">
-        <img src="/favicon.svg" alt="logo" class="brand-logo">
-        <a href="javascript:void(0)" onclick="switchView('notes')" class="site-title">wooyoung.me</a>
-      </div>
       
       <div class="menu-wrap">
         <button class="menu-btn" id="menu-btn" aria-label="메뉴" onclick="toggleMenu(event)">
