@@ -12,13 +12,13 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="wooyoung.me">
-  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -30,6 +30,18 @@
       --text-muted: #4b5563;
       --text-dim: #9ca3af;
       --accent: #2563eb;
+
+      /* Terminal Dark Theme */
+      --term-bg: #0d1117;
+      --term-card: #161b22;
+      --term-border: #30363d;
+      --term-green: #3fb950;
+      --term-blue: #58a6ff;
+      --term-cyan: #39c5cf;
+      --term-yellow: #d29922;
+      --term-red: #f85149;
+      --term-text: #e6edf3;
+      --term-dim: #8b949e;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -38,52 +50,116 @@
       color: var(--text);
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.8;
-      padding: 50px 20px 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s;
+    }
+
+    body.terminal-active {
+      background-color: var(--term-bg);
+      color: var(--term-text);
     }
 
     .container {
-      max-width: 620px;
+      max-width: 640px;
       margin: 0 auto;
+      width: 100%;
+      padding: 30px 20px 40px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Minimal Header */
+    /* Top Header & View Switcher */
     header {
-      margin-bottom: 44px;
-      padding-bottom: 22px;
+      margin-bottom: 30px;
+      padding-bottom: 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
+      gap: 12px;
     }
+    body.terminal-active header {
+      border-bottom-color: var(--term-border);
+    }
+
     .brand-wrap {
       display: flex;
       align-items: center;
       gap: 10px;
+      text-decoration: none;
     }
     .brand-logo {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
     }
     .site-title {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--text);
       text-decoration: none;
-    }
-    .site-desc {
-      font-size: 0.85rem;
-      color: var(--text-dim);
       font-family: 'JetBrains Mono', monospace;
     }
+    body.terminal-active .site-title {
+      color: #fff;
+    }
 
-    /* Journal List */
+    /* Modern Segmented Switcher */
+    .view-switcher {
+      display: flex;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    body.terminal-active .view-switcher {
+      background: #21262d;
+      border-color: var(--term-border);
+    }
+
+    .switch-btn {
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 7px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body.terminal-active .switch-btn {
+      color: var(--term-dim);
+    }
+
+    .switch-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+    body.terminal-active .switch-btn.active {
+      background: #30363d;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    /* View: Notes / Blog */
+    #view-notes {
+      display: block;
+    }
     .log-list {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 26px;
     }
     .log-item {
       cursor: pointer;
@@ -122,8 +198,6 @@
       color: var(--text-muted);
       line-height: 1.65;
     }
-
-    /* Expanded Article Reader (Inline) */
     .log-content {
       display: none;
       margin-top: 18px;
@@ -141,9 +215,7 @@
       from { opacity: 0; transform: translateY(-4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .log-content p {
-      margin-bottom: 14px;
-    }
+    .log-content p { margin-bottom: 14px; }
     .log-content code {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
@@ -162,10 +234,146 @@
       margin: 18px 0;
     }
 
-    /* Minimal Footer */
+    /* View: Terminal */
+    #view-terminal {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      background: var(--term-bg);
+      border: 1px solid var(--term-border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+    body.terminal-active #view-terminal {
+      display: flex;
+    }
+
+    .term-window-bar {
+      background: var(--term-card);
+      border-bottom: 1px solid var(--term-border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .term-lights { display: flex; gap: 6px; }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-red { background: #ff5f56; }
+    .t-yellow { background: #ffbd2e; }
+    .t-green { background: #27c93f; }
+    .term-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--term-dim);
+      font-weight: 600;
+    }
+    .node-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: rgba(63, 185, 80, 0.15);
+      color: var(--term-green);
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      cursor: pointer;
+    }
+
+    #terminal-screen {
+      flex: 1;
+      min-height: 280px;
+      max-height: calc(100vh - 280px);
+      overflow-y: auto;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--term-text);
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    /* Tool Chips */
+    .accessory-bar {
+      background: var(--term-card);
+      border-top: 1px solid var(--term-border);
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .accessory-bar::-webkit-scrollbar { display: none; }
+    .tool-chip {
+      background: #21262d;
+      border: 1px solid var(--term-border);
+      color: #c9d1d9;
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .tool-chip:active { background: #30363d; color: #fff; transform: scale(0.96); }
+    .tool-chip.accent {
+      background: rgba(88, 166, 255, 0.18);
+      border-color: rgba(88, 166, 255, 0.5);
+      color: #79b8ff;
+      font-weight: bold;
+    }
+
+    /* Terminal Input Line */
+    .term-input-line {
+      background: #090d13;
+      border-top: 1px solid var(--term-border);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .cli-prefix {
+      color: var(--term-green);
+      font-size: 13px;
+      font-weight: bold;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #cmd-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      caret-color: var(--term-green);
+      padding: 4px 0;
+    }
+    .send-icon-btn {
+      background: #238636;
+      border: none;
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .send-icon-btn:active { background: #2ea043; transform: scale(0.95); }
+
+    /* Footer */
     footer {
-      margin-top: 70px;
-      padding-top: 24px;
+      margin-top: 50px;
+      padding-top: 20px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -173,104 +381,287 @@
       color: var(--text-dim);
       font-family: 'JetBrains Mono', monospace;
     }
+    body.terminal-active footer {
+      border-top-color: var(--term-border);
+    }
     .footer-link {
       color: var(--text-dim);
       text-decoration: none;
       transition: color 0.2s;
     }
     .footer-link:hover { color: var(--text); }
+    body.terminal-active .footer-link:hover { color: #fff; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Header -->
+    <!-- Header with Integrated Segmented Switcher -->
     <header>
       <div class="brand-wrap">
         <img src="/favicon.svg" alt="logo" class="brand-logo">
-        <a href="#" class="site-title">wooyoung.me</a>
+        <a href="javascript:void(0)" onclick="switchView('notes')" class="site-title">wooyoung.me</a>
       </div>
-      <span class="site-desc">notes &amp; thoughts</span>
+      
+      <div class="view-switcher">
+        <button class="switch-btn active" id="btn-notes" onclick="switchView('notes')">📓 Notes</button>
+        <button class="switch-btn" id="btn-terminal" onclick="switchView('terminal')">⚡ Terminal</button>
+      </div>
     </header>
 
-    <!-- Post list -->
-    <main class="log-list">
+    <!-- VIEW 1: Notes / Blog -->
+    <div id="view-notes">
+      <main class="log-list">
 
-      <!-- Entry 1 -->
-      <article class="log-item active" onclick="toggleLog(this)">
-        <div class="log-date">2026. 11. 08 (일)</div>
-        <h2 class="log-title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</h2>
-        <p class="log-preview">
-          방구석에 오래 잠들어 있던 2015 아이맥 27인치를 다시 살려냈다. 8GB였던 램을 24GB로 올리고, 상시 가동되는 AI 서버로 세팅했다.
-        </p>
-        <div class="log-content">
-          <p>
-            M2 Pro 맥북 16인치가 주력이지만, 무거운 AI 작업이나 백그라운드 프로세스까지 맥북 한 대에 다 몰아넣는 건 왠지 아쉬웠다. 구형 아이맥 27인치 5K는 화면도 넓고 램 슬롯도 4개나 있어서 자율 AI 서버로 쓰기에 아주 알맞았다.
+        <!-- Entry 1 -->
+        <article class="log-item active" onclick="toggleLog(this)">
+          <div class="log-date">2026. 11. 08 (일)</div>
+          <h2 class="log-title">2015년 아이맥 24GB 업그레이드와 폰으로 부리는 AI 에이전트</h2>
+          <p class="log-preview">
+            방구석에 오래 잠들어 있던 2015 아이맥 27인치를 다시 살려냈다. 8GB였던 램을 24GB로 올리고, 상시 가동되는 AI 서버로 세팅했다.
           </p>
-          <p>
-            DDR3L 1866MHz 8GB 램 2개를 추가해 총 24GB를 만들고, Tailscale로 맥북과 아이맥을 묶었다. 스마트폰에서 SSH를 쓸 때 한글이 깨지는 문제가 거슬려서 모바일 웹 터미널을 직접 하나 짰다.
+          <div class="log-content">
+            <p>
+              M2 Pro 맥북 16인치가 주력이지만, 무거운 AI 작업이나 백그라운드 프로세스까지 맥북 한 대에 다 몰아넣는 건 왠지 아쉬웠다. 구형 아이맥 27인치 5K는 화면도 넓고 램 슬롯도 4개나 있어서 자율 AI 서버로 쓰기에 아주 알맞았다.
+            </p>
+            <p>
+              DDR3L 1866MHz 8GB 램 2개를 추가해 총 24GB를 만들고, Tailscale로 맥북과 아이맥을 묶었다. 스마트폰에서 SSH를 쓸 때 한글이 깨지는 문제가 거슬려서 모바일 웹 터미널을 직접 하나 짰다.
+            </p>
+            <blockquote>
+              "침대에 누워서 갤럭시 폰으로 'agent 이거 만들어줘'라고 한글로 치면, 서재의 아이맥이 알아서 코드를 짜고 바탕화면에 파일을 저장한다."
+            </blockquote>
+            <p>
+              거창한 클라우드 결제 없이도 집에 있는 하드웨어끼리 연결해서 나만의 시스템을 만들어가는 과정이 꽤나 재미있다.
+            </p>
+          </div>
+        </article>
+
+        <!-- Entry 2 -->
+        <article class="log-item" onclick="toggleLog(this)">
+          <div class="log-date">2026. 11. 07 (토)</div>
+          <h2 class="log-title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</h2>
+          <p class="log-preview">
+            처음에는 웹사이트에 멋진 슬로건도 넣고 회사 포트폴리오처럼 꾸며볼까 고민했다. 하지만 아직 구체적인 사업 방향이 정해지지도 않았는데 껍데기부터 만드는 건 맞지 않았다.
           </p>
-          <blockquote>
-            "침대에 누워서 갤럭시 폰으로 'agent 이거 만들어줘'라고 한글로 치면, 서재의 아이맥이 알아서 코드를 짜고 바탕화면에 파일을 저장한다."
-          </blockquote>
-          <p>
-            거창한 클라우드 결제 없이도 집에 있는 하드웨어끼리 연결해서 나만의 시스템을 만들어가는 과정이 꽤나 재미있다.
+          <div class="log-content">
+            <p>
+              남들에게 보여주기 위한 화려한 랜딩페이지보다는, 내가 매일 부딪히고 만들어낸 결과들을 일기처럼 솔직하게 쌓아가는 도화지 같은 공간이 훨씬 자연스럽다.
+            </p>
+            <p>
+              글이 10개, 50개 쌓이다 보면 내가 진짜 무엇을 좋아하고 어떤 가치를 만들어낼 수 있는지 자연스럽게 방향이 보일 것이다. 군더더기를 다 덜어내고 글씨와 생각에만 집중할 수 있는 이 형식이 마음에 든다.
+            </p>
+          </div>
+        </article>
+
+        <!-- Entry 3 -->
+        <article class="log-item" onclick="toggleLog(this)">
+          <div class="log-date">2026. 11. 05 (목)</div>
+          <h2 class="log-title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</h2>
+          <p class="log-preview">
+            AI 도구가 쏟아지는 시대지만, 결국 가장 중요한 건 '내가 무엇을 하고 싶은가'라는 주도권이다.
           </p>
+          <div class="log-content">
+            <p>
+              새로운 기술이 나올 때마다 허겁지겁 따라가는 것보다, 내 일상과 개발 환경에 딱 필요한 만큼만 실용적으로 녹여내는 훈련을 하고 있다.
+            </p>
+            <p>
+              혼자서도 도구들을 레버리지해서 더 밀도 있게 일하는 법을 계속 실험해볼 생각이다.
+            </p>
+          </div>
+        </article>
+
+      </main>
+    </div>
+
+    <!-- VIEW 2: Integrated iMac Terminal & AI Hub -->
+    <div id="view-terminal">
+      <div class="term-window-bar">
+        <div class="term-lights">
+          <div class="t-dot t-red"></div>
+          <div class="t-dot t-yellow"></div>
+          <div class="t-dot t-green"></div>
         </div>
-      </article>
+        <div class="term-title">apple@imac-24gb: ~ (zsh)</div>
+        <div class="node-status" onclick="configEndpoint()" title="클릭하여 연결 엔드포인트 설정">● iMac Active</div>
+      </div>
 
-      <!-- Entry 2 -->
-      <article class="log-item" onclick="toggleLog(this)">
-        <div class="log-date">2026. 11. 07 (토)</div>
-        <h2 class="log-title">남들 따라 하는 복잡한 브랜딩보다 내 기록이 먼저다</h2>
-        <p class="log-preview">
-          처음에는 웹사이트에 멋진 슬로건도 넣고 회사 포트폴리오처럼 꾸며볼까 고민했다. 하지만 아직 구체적인 사업 방향이 정해지지도 않았는데 껍데기부터 만드는 건 맞지 않았다.
-        </p>
-        <div class="log-content">
-          <p>
-            남들에게 보여주기 위한 화려한 랜딩페이지보다는, 내가 매일 부딪히고 만들어낸 결과들을 일기처럼 솔직하게 쌓아가는 도화지 같은 공간이 훨씬 자연스럽다.
-          </p>
-          <p>
-            글이 10개, 50개 쌓이다 보면 내가 진짜 무엇을 좋아하고 어떤 가치를 만들어낼 수 있는지 자연스럽게 방향이 보일 것이다. 군더더기를 다 덜어내고 글씨와 생각에만 집중할 수 있는 이 형식이 마음에 든다.
-          </p>
-        </div>
-      </article>
+      <!-- Output Screen -->
+      <div id="terminal-screen">
+        <div style="color: #8b949e;">Connected to iMac 27" 5K (24GB Node) via Secure Tunnel.</div>
+        <div style="color: #3fb950; font-weight: bold;">Antigravity Autonomous Agent Ready.</div>
+        <div style="color: #8b949e;">아래 툴바의 [🤖 agent]를 눌러 한글로 작업을 지시하세요.</div>
+        <br>
+      </div>
 
-      <!-- Entry 3 -->
-      <article class="log-item" onclick="toggleLog(this)">
-        <div class="log-date">2026. 11. 05 (목)</div>
-        <h2 class="log-title">도구에 휘둘리지 않고, 도구를 부리는 사람 되기</h2>
-        <p class="log-preview">
-          AI 도구가 쏟아지는 시대지만, 결국 가장 중요한 건 '내가 무엇을 하고 싶은가'라는 주도권이다.
-        </p>
-        <div class="log-content">
-          <p>
-            새로운 기술이 나올 때마다 허겁지겁 따라가는 것보다, 내 일상과 개발 환경에 딱 필요한 만큼만 실용적으로 녹여내는 훈련을 하고 있다.
-          </p>
-          <p>
-            혼자서도 도구들을 레버리지해서 더 밀도 있게 일하는 법을 계속 실험해볼 생각이다.
-          </p>
-        </div>
-      </article>
+      <!-- Accessory Bar -->
+      <div class="accessory-bar">
+        <button type="button" class="tool-chip accent" onclick="fillAgent(event)">🤖 agent</button>
+        <button type="button" class="tool-chip" onclick="quickRun('status')">⚡ status</button>
+        <button type="button" class="tool-chip" onclick="quickRun('uptime')">⏱️ uptime</button>
+        <button type="button" class="tool-chip" onclick="fillSay(event)">🗣️ say</button>
+        <button type="button" class="tool-chip" onclick="quickRun('ls -la')">📂 ls</button>
+        <button type="button" class="tool-chip" onclick="quickRun('df -h /')">💾 df</button>
+        <button type="button" class="tool-chip" onclick="clearScreen()">🧹 clear</button>
+      </div>
 
-    </main>
+      <!-- Input Line -->
+      <form class="term-input-line" onsubmit="handleCommand(event)">
+        <span class="cli-prefix">%</span>
+        <input 
+          id="cmd-input" 
+          type="text" 
+          autocomplete="off" 
+          autocorrect="off" 
+          autocapitalize="off" 
+          spellcheck="false"
+          placeholder="명령어 또는 agent &quot;작업 내용&quot; 입력..." 
+        />
+        <button type="submit" class="send-icon-btn">↵</button>
+      </form>
+    </div>
 
     <!-- Footer -->
     <footer>
-      <span>© 2026 wooyoung</span>
+      <span>© 2026 wooyoung.me</span>
       <a href="mailto:fz7948@gmail.com" class="footer-link">email</a>
     </footer>
   </div>
 
   <script>
+    // View Switcher
+    function switchView(viewName) {
+      const isTerm = (viewName === 'terminal');
+      document.body.classList.toggle('terminal-active', isTerm);
+      document.getElementById('view-notes').style.display = isTerm ? 'none' : 'block';
+      document.getElementById('view-terminal').style.display = isTerm ? 'flex' : 'none';
+      
+      document.getElementById('btn-notes').classList.toggle('active', !isTerm);
+      document.getElementById('btn-terminal').classList.toggle('active', isTerm);
+
+      if (isTerm) {
+        setTimeout(() => {
+          document.getElementById('cmd-input').focus();
+          scrollToBottom();
+        }, 100);
+      }
+    }
+
+    // Journal Accordion
     function toggleLog(element) {
       const wasActive = element.classList.contains('active');
-      document.querySelectorAll('.log-item').forEach(el => {
-        el.classList.remove('active');
-      });
-      if (!wasActive) {
-        element.classList.add('active');
+      document.querySelectorAll('.log-item').forEach(el => el.classList.remove('active'));
+      if (!wasActive) element.classList.add('active');
+    }
+
+    // Terminal Logic
+    const screen = document.getElementById("terminal-screen");
+    const input = document.getElementById("cmd-input");
+
+    // Dynamic backend endpoint with fallback to Cloudflare Tunnel
+    const DEFAULT_API = "https://favourite-lenders-camcorders-hobbies.trycloudflare.com";
+    function getApiEndpoint() {
+      return localStorage.getItem("imac_api_endpoint") || DEFAULT_API;
+    }
+
+    function configEndpoint() {
+      const current = getApiEndpoint();
+      const updated = prompt("iMac 백엔드 엔드포인트 URL을 입력하세요:", current);
+      if (updated && updated.trim()) {
+        localStorage.setItem("imac_api_endpoint", updated.trim());
+        alert("엔드포인트가 설정되었습니다: " + updated.trim());
       }
+    }
+
+    function scrollToBottom() {
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    function appendLine(html) {
+      const line = document.createElement("div");
+      line.innerHTML = html;
+      screen.appendChild(line);
+      scrollToBottom();
+    }
+
+    function clearScreen() {
+      screen.innerHTML = "<div style='color: #8b949e;'>Terminal buffer cleared.</div><br>";
+    }
+
+    function fillAgent(e) {
+      if (e) e.preventDefault();
+      input.value = 'agent ""';
+      input.focus();
+      setTimeout(() => {
+        input.focus();
+        try { input.setSelectionRange(7, 7); } catch(err){}
+      }, 50);
+    }
+
+    function fillSay(e) {
+      if (e) e.preventDefault();
+      input.value = 'say ""';
+      input.focus();
+      setTimeout(() => {
+        input.focus();
+        try { input.setSelectionRange(5, 5); } catch(err){}
+      }, 50);
+    }
+
+    function quickRun(cmd) {
+      input.value = cmd;
+      executeCommand(cmd);
+    }
+
+    function handleCommand(e) {
+      e.preventDefault();
+      const cmd = input.value;
+      if (!cmd.trim()) return;
+      executeCommand(cmd);
+    }
+
+    async function executeCommand(cmd) {
+      input.value = "";
+      
+      appendLine(`<span style="color: #3fb950; font-weight: bold;">apple@imac-24gb</span> <span style="color: #58a6ff;">~</span> <span style="color: #8b949e;">%</span> <span style="color: #fff; font-weight: bold;">${escapeHtml(cmd)}</span>`);
+
+      if (cmd.trim() === "clear") {
+        clearScreen();
+        return;
+      }
+
+      const pendingId = "pending-" + Date.now();
+      const isAgent = cmd.trim().startsWith("agent ");
+      const pendingText = isAgent ? "🤖 AI 에이전트가 생각하고 작업을 처리하는 중입니다..." : "⏳ Executing on iMac...";
+      appendLine(`<span style="color: #8b949e;" id="${pendingId}">${pendingText}</span>`);
+
+      try {
+        const endpoint = getApiEndpoint() + "/api/exec";
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command: cmd })
+        });
+        const data = await res.json();
+        const pendingEl = document.getElementById(pendingId);
+        if (pendingEl) pendingEl.remove();
+
+        if (data.output) {
+          appendLine(`<span style="color: #e6edf3;">${escapeHtml(data.output)}</span>`);
+        } else if (data.error) {
+          appendLine(`<span style="color: #f85149;">${escapeHtml(data.error)}</span>`);
+        } else {
+          appendLine(`<span style="color: #8b949e;">(Command completed with no output)</span>`);
+        }
+      } catch (err) {
+        const pendingEl = document.getElementById(pendingId);
+        if (pendingEl) pendingEl.remove();
+        appendLine(`<span style="color: #f85149;">Network/Connection Error: ${err.message}<br><small style="color: #8b949e;">(iMac 터널이 켜져 있는지 확인하거나 우측 상단 'iMac Active'를 눌러 엔드포인트를 확인하세요)</small></span>`);
+      }
+      appendLine("<br>");
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
     // Register Service Worker for PWA
@@ -284,4 +675,3 @@
   </script>
 </body>
 </html>
-
