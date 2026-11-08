@@ -190,6 +190,7 @@
       border-bottom: 1px solid var(--border);
     }
     .log-item:first-child { padding-top: 8px; }
+    .log-item:last-child { border-bottom: none; }
 
     /* Reader mode (single post page) */
     .back-link {
@@ -421,13 +422,10 @@
     /* Footer */
     footer {
       margin-top: 56px;
-      padding-top: 28px;
-      border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    body.terminal-active footer { border-top-color: var(--term-border); }
     .footer-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
@@ -599,11 +597,11 @@
       <div>
         <div class="footer-label">Connect</div>
         <p class="footer-text">
-          연락은 <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a> 으로 주세요.
+          Reach me at <a href="mailto:fz7948@gmail.com" class="footer-link">fz7948@gmail.com</a>.
         </p>
       </div>
       <div class="footer-bottom">
-        <span>천천히, 꾸준히 기록합니다.</span>
+        <span>Writing things down, slowly and steadily.</span>
         <span>2026</span>
       </div>
     </footer>
